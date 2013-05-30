@@ -168,6 +168,23 @@ uint32_t negBinary(uint32_t i){
 	return negBit(i,31);
 }
 
+void updateNZinCPSR(state *s, uint32_t res, int S){
+
+	int N;
+	int Z;
+
+	if(S==1){
+		 if(res == 0){
+			 Z = 1;
+		 }
+
+		 N = bitCheck(res,31);
+
+		 s->CPSR = setBit(s->CPSR,31,N);
+		 s->CPSR = setBit(s->CPSR,30,Z);
+	 }
+}
+
 void checkInstruction(uint32_t inst, state *s){
  uint32_t bits26_27  = getBits(inst,26,27);
  uint32_t bits4_7    = getBits(inst,4,7);

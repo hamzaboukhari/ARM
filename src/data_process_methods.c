@@ -168,7 +168,7 @@ int getOp2Carry(state *s, uint32_t inst, int I){
 	 return C;
 }
 
-uint8_t getOpCode(uint32_t inst){
+uint32_t getOpCode(uint32_t inst){
   return getBits(inst,21,24);
 }
 
@@ -181,8 +181,6 @@ void data_process(uint32_t inst, state *s){
 	 int I = bitCheck(inst, 25);
 	 int S = bitCheck(inst, 20);
 	 int Rd = getBits(inst,12,15);
-	 int N;
-	 int Z;
 	 int C;
 	 uint32_t res;
 
@@ -202,15 +200,15 @@ void data_process(uint32_t inst, state *s){
 	  case(13): res = mov(s,op2,Rd);break;
 	  default: perror("data_process opcode error\n");break;
 	 }
-	 printRegisters(*s);
 
+	 /*
 	 //____________Test Instruction____________
 	 //                           Operand2
 	 //Cond 00 I OpC. S Rn   Rd   Rot. Imm. Val
 	 //1110 00 1 0001 1 0000 0001 0001 00000001
 
 	 //debugger:
-	 printf("\nRunning Data Processing Instruction:");
+	 printf("\nRunning Data Processing Instruction: ");
 	 switch(opcode){
 	 	  case(0) : printf("and\n");break;
 	 	  case(1) : printf("eor\n");break;
@@ -226,20 +224,12 @@ void data_process(uint32_t inst, state *s){
 	 }printf("Result: ");printHex(res);
 
 	 printRegisters(*s);
-
+	 */
 
 	 //Run S Check
-	 if(S==1){
-		 if(res == 0){
-			 Z = 1;
-		 }
 
-		 N = bitCheck(res,31);
-
-		 s->CPSR = setBit(s->CPSR,31,N);
-		 s->CPSR = setBit(s->CPSR,30,Z);
-		 s->CPSR = setBit(s->CPSR,29,C);
-	 }
+	 updateNZinCPSR(s,res,S);
+	 s->CPSR = setBit(s->CPSR,29,C);
 
 
 }
