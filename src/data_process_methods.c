@@ -116,6 +116,58 @@ uint32_t mov(state *s, uint32_t op2, int Rd){
 	return op2;
 }
 
+uint32_t getOp2(state *s, uint32_t inst, int I){
+
+	 uint32_t op2;
+
+	 if(I == 1){
+		//Operand2 is an immediate value
+		op2 = rotateRight(getBits(inst,0,7),2*getBits(inst,8,11));
+	 } else {
+		//Operand2 is a register
+		int Rm = getBits(inst,0,11);
+		op2 = s -> reg[Rm];
+		if(bitCheck(inst,4)==0){
+			//Shift Specified By A Constant Amount
+			op2 = shift(op2,
+						getBits(inst,5,6),
+						getBits(inst,7,11));
+		}else{
+			//optional: Shift Specified By A Register
+			op2 = shift(op2,
+						getBits(inst,5,6),
+						s -> reg[getBits(inst,8,11)]);
+		}
+	 }
+
+	 return op2;
+}
+
+int getOp2Carry(state *s, uint32_t inst, int I){
+
+	 uint32_t op2;
+	 int C;
+
+	 if(I != 1){
+		//Operand2 is a register
+		int Rm = getBits(inst,0,11);
+		op2 = s -> reg[Rm];
+		if(bitCheck(inst,4)==0){
+			//Shift Specified By A Constant Amount
+			C = shiftCarryOut(op2,
+							  getBits(inst,5,6),
+							  getBits(inst,7,11));
+		}else{
+			//optional: Shift Specified By A Register
+			C = shiftCarryOut(op2,
+							  getBits(inst,5,6),
+							  s -> reg[getBits(inst,8,11)]);
+		}
+	 }
+
+	 return C;
+}
+
 void data_process(uint32_t inst, state *s){
 
 	 uint32_t op1 = getBits(inst,16,19);
@@ -130,32 +182,8 @@ void data_process(uint32_t inst, state *s){
 	 int C;
 	 uint32_t res;
 
-	 if(I == 1){
-		//Operand2 is an immediate value
-		op2 = rotateRight(getBits(inst,0,7),2*getBits(inst,8,11));
-	 } else {
-		//Operand2 is a register
-		int Rm = getBits(inst,0,11);
-		op2 = s -> reg[Rm];
-		if(bitCheck(inst,4)==0){
-			//Shift Specified By A Constant Amount
-			op2 = shift(op2,
-						getBits(inst,5,6),
-						getBits(inst,7,11));
-			C = shiftCarryOut(op2,
-							  getBits(inst,5,6),
-							  getBits(inst,7,11));
-		}else{
-			//optional: Shift Specified By A Register
-			op2 = shift(op2,
-						getBits(inst,5,6),
-						s -> reg[getBits(inst,8,11)]);
-			C = shiftCarryOut(op2,
-							  getBits(inst,5,6),
-							  s -> reg[getBits(inst,8,11)]);
-		}
-	 }
-
+	 op2 = getOp2(s,inst,I);
+	 C = getOp2Carry(s,inst,I);
 
 	 switch(opcode){
 	  case(0) : res = and(s,op1,op2,Rd);break;
@@ -171,6 +199,7 @@ void data_process(uint32_t inst, state *s){
 	  default: perror("data_process opcode error\n");break;
 	 }
 
+	 /*
 	 //debugger:
 	 switch(opcode){
 	 	  case(0) : printf("DP: and\n");break;
@@ -185,6 +214,7 @@ void data_process(uint32_t inst, state *s){
 	 	  case(13): printf("DP: mov\n");break;
 	 	  default: perror("data_process opcode error\n");break;
 	 }printf("Result: ");printHex(res);
+	  */
 
 	 //Run S Check
 	 if(S==1){
