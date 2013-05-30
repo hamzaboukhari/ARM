@@ -166,7 +166,10 @@ uint32_t negBit(uint32_t i,int n){
 }
 
 uint32_t negBinary(uint32_t i){
-	return negBit(i,31);
+for(int k=0;k<32;k++){
+i = negBit(i,k);
+}
+return addBinary(i,1);
 }
 
 void updateNZinCPSR(state *s, uint32_t res, int S){
@@ -256,7 +259,7 @@ uint32_t getIndex(state s){
 void start(state *s,cycle *c){
  int i=0;
  printf("PC initially: 0x%x \n",s -> PC);
- while(c -> prev_instr != 0x00000000){
+ while(c -> current_instr != 0x00000000){
    uint32_t current_inst = c -> current_instr;
    if(checkB(current_inst)){
 	initCycle();
@@ -266,9 +269,6 @@ void start(state *s,cycle *c){
    }else{
 	c -> current_instr = c -> prev_instr;
 	c -> prev_instr = s -> data_mem[i];
-	s -> PC += 4;
-	c -> current_instr = c -> prev_instr;
-	c -> prev_instr = s -> data_mem[i+1];
 	s -> PC += 4;
 	execute(s,c -> current_instr);
 	i++;

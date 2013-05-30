@@ -14,7 +14,7 @@
 int main(void){
  long size;
  //int32_t instr = 0xE3A01001;
- FILE *fp = fopen("tests/add01","rb");
+ FILE *fp = fopen("tests/and01","rb");
  state current_state;
  cycle current_cycle;
  if(fp == NULL){
@@ -33,6 +33,7 @@ int main(void){
  start(&current_state,&current_cycle);
  printRegisters(current_state);
  printf("\n");
+ //printFile_Memory(current_state);
  //printFile_Memory(current_state);
  return 0;
 }
