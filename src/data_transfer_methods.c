@@ -145,10 +145,10 @@ void data_transfer(uint32_t inst, state *s){
  //rn = 0x200;
  //rd = 0;
 
- s -> ARM_mem[0x200] = 0x05;
- s -> ARM_mem[0x20c] = 0x30;
- s -> reg[rn] = 0x200;
- s -> reg[rd] = 0;
+// s -> ARM_mem[0x200] = 0x05;
+// s -> ARM_mem[0x20c] = 0x30;
+// s -> reg[rn] = 0x200;
+// s -> reg[rd] = 0;
 
  //printARM_Memory(*s);
  indexing(s,P_Bit,U_Bit,inst);

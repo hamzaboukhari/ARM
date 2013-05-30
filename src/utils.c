@@ -15,7 +15,7 @@
 #include "data_transfer.h"
 
 cycle initCycle(void){
- cycle c = {.current_instr = 0, .prev_instr = 0, .type = 0};
+ cycle c = {.current_instr = 1, .prev_instr = 0, .type = 0};
  return c;
 }
 
@@ -40,6 +40,7 @@ void printHex(uint32_t x){
 }
 
 void printRegisters(state s){
+ printf("Registers: \n\n");
  for(int i=0; i<13; i++){
   printf("Register %d\t ", i);
   printHex(s.reg[i]);
@@ -185,21 +186,6 @@ void updateNZinCPSR(state *s, uint32_t res, int S){
 	 }
 }
 
-void checkInstruction(uint32_t inst, state *s){
- uint32_t bits26_27  = getBits(inst,26,27);
- uint32_t bits4_7    = getBits(inst,4,7);
- uint32_t bits22_27  = getBits(inst,22,27);
-
- if(bits26_27 == 1){
-  data_transfer(inst,s);
- }else if(bits26_27 == 2){
-  branch(inst,s);
- }else if(bits4_7 == 9 && bits22_27 == 0){
-  multiply(inst,s);
- }else if(bits26_27 == 0){
-  data_process(inst,s);
- }
-}
 
 //this method is only called if the flag bits match;
 //N,Z,C,V - 0,1,2,3 indexes;
@@ -215,26 +201,26 @@ void flagCheck(int bit, int status, state *s,uint32_t instr){
  if(bit == 2){
   if(Z_bitCheck == status){
    printf("cond1 \n");
-   checkInstruction(instr,s);
+   runInstruction(instr,s);
   }
  }else if(bit == 3){
   if(N_bitCheck == status){
    printf("cond2 \n");
-   checkInstruction(instr,s);
+   runInstruction(instr,s);
   }
  }else if((bit == 4) && (status == 0)){
   if((Z_bitCheck == 0) && (N_bitCheck == V_bitCheck)){
    printf("cond3\n");
-   checkInstruction(instr,s);
+   runInstruction(instr,s);
   }
  }else if((bit == 4) && (status == 1)){
   if((Z_bitCheck == 1) || (N_bitCheck != V_bitCheck)){
    printf("cond4 \n");
-   checkInstruction(instr,s);
+   runInstruction(instr,s);
   }
  }else if((bit == 0) && (status == 0)){
    printf("cond5 \n");
-   checkInstruction(instr,s);
+   runInstruction(instr,s);
  }else{
   perror("Invalid method call \n");
   exit(EXIT_FAILURE);
@@ -264,13 +250,13 @@ void execute(state *s, uint32_t instr){
 
 //Need to work on this:
 void start(state *s,cycle *c){
- int i=0;
  while(c -> current_instr != 0x00000000){
   s -> PC += 4;
   c -> current_instr = c -> prev_instr;
   s -> PC += 4;
-  c -> prev_instr = s -> data_mem[i];
+  uint32_t PC_val = s -> PC;
+  c -> prev_instr = s -> data_mem[PC_val/4];
+  printf("0x%x\n",PC_val);
   execute(s,c -> current_instr);
-  i++;
  }
 }

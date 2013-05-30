@@ -13,7 +13,7 @@
 
 int main(void){
  long size;
- uint32_t instr = 0xE2301101;
+ uint32_t instr = 0xE3A01001;
  FILE *fp = fopen("add01","rb");
  state current_state;
  cycle current_cycle;
@@ -30,7 +30,8 @@ int main(void){
  fread(current_state.data_mem, 4, sizeof(uint32_t)*100, fp);
  fclose(fp);
  execute(&current_state,instr);
- //printRegisters(current_state);
+ //start(&current_state,&current_cycle);
+ printRegisters(current_state);
  printf("\n");
  //printFile_Memory(current_state);
  return 0;
