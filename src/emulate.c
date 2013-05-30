@@ -13,7 +13,7 @@
 
 int main(void){
  long size;
- uint32_t instr = 0xE481000C;
+ uint32_t instr = 0xE2301101;
  FILE *fp = fopen("add01","rb");
  state current_state;
  cycle current_cycle;

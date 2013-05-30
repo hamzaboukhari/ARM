@@ -2,7 +2,7 @@
  * data_process.h
  *
  *  Created on: 29 May 2013
- *      Author: Pavan
+ *      Author: Hakeem
  */
 
 #ifndef DATA_PROCESS_H_
@@ -25,6 +25,7 @@ uint32_t cmp(state *s, uint32_t op1, uint32_t op2);
 uint32_t orr(state *s, uint32_t op1, uint32_t op2, int Rd);
 uint32_t mov(state *s, uint32_t op2, int Rd);
 
+uint8_t getOpCode(uint32_t inst);
 void data_process(uint32_t inst, state *s);
 
 #endif /* DATA_PROCESS_H_ */

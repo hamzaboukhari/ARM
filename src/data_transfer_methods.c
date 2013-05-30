@@ -153,7 +153,7 @@ void data_transfer(uint32_t inst, state *s){
  //printARM_Memory(*s);
  indexing(s,P_Bit,U_Bit,inst);
  printf("\n");
- printRegisters(*s);
+ //printRegisters(*s);
  //printARM_Memory(*s);
 }
 

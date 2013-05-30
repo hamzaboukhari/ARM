@@ -168,13 +168,6 @@ uint32_t negBinary(uint32_t i){
 	return negBit(i,31);
 }
 
-//This method is used by the data_process only;
-uint8_t getOpCode(uint32_t inst){
-  uint32_t mask = 0x01E00000;
-  uint32_t res = mask & inst;
-  return res >> 28;
-}
-
 void checkInstruction(uint32_t inst, state *s){
  uint32_t bits26_27  = getBits(inst,26,27);
  uint32_t bits4_7    = getBits(inst,4,7);

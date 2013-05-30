@@ -2,7 +2,7 @@
  * data_process_methods.c
  *
  *  Created on: 29 May 2013
- *      Author: Pavan
+ *      Author: Hakeem
  */
 
 
@@ -168,6 +168,10 @@ int getOp2Carry(state *s, uint32_t inst, int I){
 	 return C;
 }
 
+uint8_t getOpCode(uint32_t inst){
+  return getBits(inst,21,24);
+}
+
 void data_process(uint32_t inst, state *s){
 
 	 uint32_t op1 = getBits(inst,16,19);
@@ -198,23 +202,31 @@ void data_process(uint32_t inst, state *s){
 	  case(13): res = mov(s,op2,Rd);break;
 	  default: perror("data_process opcode error\n");break;
 	 }
+	 printRegisters(*s);
 
-	 /*
+	 //____________Test Instruction____________
+	 //                           Operand2
+	 //Cond 00 I OpC. S Rn   Rd   Rot. Imm. Val
+	 //1110 00 1 0001 1 0000 0001 0001 00000001
+
 	 //debugger:
+	 printf("\nRunning Data Processing Instruction:");
 	 switch(opcode){
-	 	  case(0) : printf("DP: and\n");break;
-	 	  case(1) : printf("DP: eor\n");break;
-	 	  case(2) : printf("DP: sub\n");break;
-	 	  case(3) : printf("DP: rsb\n");break;
-	 	  case(4) : printf("DP: add\n");break;
-	 	  case(8) : printf("DP: tst\n");break;
-	 	  case(9) : printf("DP: teq\n");break;
-	 	  case(10): printf("DP: cmp\n");break;
-	 	  case(12): printf("DP: orr\n");break;
-	 	  case(13): printf("DP: mov\n");break;
+	 	  case(0) : printf("and\n");break;
+	 	  case(1) : printf("eor\n");break;
+	 	  case(2) : printf("sub\n");break;
+	 	  case(3) : printf("rsb\n");break;
+	 	  case(4) : printf("add\n");break;
+	 	  case(8) : printf("tst\n");break;
+	 	  case(9) : printf("teq\n");break;
+	 	  case(10): printf("cmp\n");break;
+	 	  case(12): printf("orr\n");break;
+	 	  case(13): printf("mov\n");break;
 	 	  default: perror("data_process opcode error\n");break;
 	 }printf("Result: ");printHex(res);
-	  */
+
+	 printRegisters(*s);
+
 
 	 //Run S Check
 	 if(S==1){
