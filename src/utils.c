@@ -47,7 +47,7 @@ void printRegisters(state s){
  printf("\n");
 
  printf("PC: \t ");
- printHex(s.PC);
+ printHex(s.PC );
 
  printf("CPSR: \t ");
  printHex(s.CPSR);
@@ -175,14 +175,6 @@ uint8_t getOpCode(uint32_t inst){
   return res >> 28;
 }
 
-void multiply(uint32_t inst, state *s){
- //TODO: Implement
-}
-
-void branch(uint32_t inst, state *s){
- //TODO: Implement
-}
-
 void checkInstruction(uint32_t inst, state *s){
  uint32_t bits26_27  = getBits(inst,26,27);
  uint32_t bits4_7    = getBits(inst,4,7);
@@ -256,7 +248,7 @@ void execute(state *s, uint32_t instr){
  //careful:
  case(12) : flagCheck(OTHER,LOW,s,instr); break;
  case(13) : flagCheck(OTHER,HIGH,s,instr); break;
- default  : printf("wont be executed \n");
+ default  : printf("wont be executed \n"); break;
  }
 }
 
