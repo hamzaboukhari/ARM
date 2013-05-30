@@ -8,6 +8,6 @@
 #ifndef MULTIPLY_H_
 #define MULTIPLY_H_
 
-
+void multiply(uint32_t i, state *s);
 
 #endif /* MULTIPLY_H_ */

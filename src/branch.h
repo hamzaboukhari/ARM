@@ -8,6 +8,6 @@
 #ifndef BRANCH_H_
 #define BRANCH_H_
 
-
+void branch(uint32_t i, state *s);
 
 #endif /* BRANCH_H_ */
