@@ -45,7 +45,7 @@ uint32_t immediate(uint32_t offset){
 }
 
 uint32_t getOffset(uint32_t inst){
- int I_Bit = bitcheck(inst,25); // check if I bit is high;
+ int I_Bit = bitCheck(inst,25); // check if I bit is high;
  uint32_t offset = getBits(inst,0,11);
  if(I_Bit){
   return shiftedReg(offset);
@@ -125,10 +125,10 @@ void indexing(state *s,int P_Bit,int U_Bit,uint32_t inst){
 }
 
 void data_transfer(uint32_t inst, state *s){
- int U_Bit = bitcheck(inst,23); // check if UP_BIT is set high;
- int P_Bit = bitcheck(inst,24); // check if P_BIT is set high;
- //int L_Bit = bitcheck(inst,20); // check if L bit is high;
- //int I_Bit = bitcheck(inst,25); // check if I bit is high;
+ int U_Bit = bitCheck(inst,23); // check if UP_BIT is set high;
+ int P_Bit = bitCheck(inst,24); // check if P_BIT is set high;
+ //int L_Bit = bitCheck(inst,20); // check if L bit is high;
+ //int I_Bit = bitCheck(inst,25); // check if I bit is high;
 
  uint32_t rd 	 = getRD(inst);
  uint32_t rn 	 = getRN(inst);
@@ -154,5 +154,6 @@ void data_transfer(uint32_t inst, state *s){
  indexing(s,P_Bit,U_Bit,inst);
  printf("\n");
  printRegisters(*s);
+ //printARM_Memory(*s);
 }
 

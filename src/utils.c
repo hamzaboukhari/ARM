@@ -103,7 +103,7 @@ uint8_t getCond(uint32_t inst){
  return res >> 28;
 }
 
-int bitcheck(uint32_t inst,int index){
+int bitCheck(uint32_t inst,int index){
  uint32_t mask = 1 << index;
  if(!(mask & inst)){
   return 0;
@@ -124,34 +124,55 @@ uint32_t getBits(uint32_t x,int initial, int final){
 	return x;
 }
 
+uint32_t setBit(uint32_t i, int n, int newBit){
+	uint32_t mask = newBit << n;
+	if(bitCheck(i,n)==1 && newBit==0){
+		uint32_t lBits = getBits(i,n+1, 31) << (n+1);
+		uint32_t rBits = getBits(i,0, n-1);
+		return (lBits | rBits) | mask;
+	} else if(bitCheck(i,n)==0 && newBit==1){
+		return (i | mask);
+	}
+	return i;
+}
+
+uint32_t setBits(uint32_t i, int initial, int final, int newBit){
+	for(int k=initial;k<=final;k++){
+		i = setBit(i,k,newBit);
+	}
+	return i;
+}
+
+uint32_t addBinary(uint32_t op1, uint32_t op2){
+    uint32_t c = 0;
+    uint32_t result = 0;
+    int value = 0;
+    for(int i = 0; i < 32 ; i++) {
+        value = ((bitCheck(op1, i) ^ bitCheck(op2, i)) ^ c);
+        result = setBit(result, i, value);
+        c = ((bitCheck(op1, i) & bitCheck(op2, i)) | (bitCheck(op1, i) & c)) | (bitCheck(op2, i) & c);
+    }
+    return result;
+ }
+
+uint32_t negBit(uint32_t i,int n){
+	if(bitCheck(i,n)==1){
+		i = setBit(i,n,0);
+	} else if(bitCheck(i,n)==0){
+		i = setBit(i,n,1);
+	}
+	return i;
+}
+
+uint32_t negBinary(uint32_t i){
+	return negBit(i,31);
+}
+
 //This method is used by the data_process only;
 uint8_t getOpCode(uint32_t inst){
   uint32_t mask = 0x01E00000;
   uint32_t res = mask & inst;
   return res >> 28;
-}
-
-void data_process(uint32_t inst, state *s){
- //TODO: Implement
- uint32_t I_mask = 0x01000000;
- uint32_t S_mask = 0x00100000;
- uint8_t opcode = getOpCode(inst);
- int I_Check = bitsCheck(inst, I_mask);
- int S_Check = bitsCheck(inst, S_mask);
-
- switch(opcode){
-  case(0) : and(s,inst,I_Check,S_Check);break;
-  case(1) : eor(s,inst,I_Check,S_Check);break;
-  case(2) : sub(s,inst,I_Check,S_Check);break;
-  case(3) : rsb(s,inst,I_Check,S_Check);break;
-  case(4) : add(s,inst,I_Check,S_Check);break;
-  case(8) : tst(s,inst,I_Check,S_Check);break;
-  case(9) : teq(s,inst,I_Check,S_Check);break;
-  case(10): cmp(s,inst,I_Check,S_Check);break;
-  case(12): orr(s,inst,I_Check,S_Check);break;
-  case(13): mov(s,inst,I_Check,S_Check);break;
-  default : perror("data_process opcode error");
- }
 }
 
 void multiply(uint32_t inst, state *s){

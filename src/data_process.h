@@ -8,17 +8,23 @@
 #ifndef DATA_PROCESS_H_
 #define DATA_PROCESS_H_
 
-void and(state *st, uint32_t inst,int I, int S);
-void eor(state *st, uint32_t inst,int I, int S);
-void sub(state *st, uint32_t inst,int I, int S);
-void rsb(state *st, uint32_t inst,int I, int S);
-void add(state *st, uint32_t inst,int I, int S);
-void tst(state *st, uint32_t inst,int I, int S);
-void teq(state *st, uint32_t inst,int I, int S);
-void cmp(state *st, uint32_t inst,int I, int S);
-void orr(state *st, uint32_t inst,int I, int S);
-void mov(state *st, uint32_t inst,int I, int S);
-
 uint32_t rotateRight(uint32_t i, int bits);
+uint32_t zero_extend(uint8_t immval);
+
+uint32_t shift(uint32_t op2, int type, int n);
+int shiftCarryOut(uint32_t op2, int type, int n);
+
+uint32_t and(state *s, uint32_t op1, uint32_t op2, int Rd);
+uint32_t eor(state *s, uint32_t op1, uint32_t op2, int Rd);
+uint32_t sub(state *s, uint32_t op1, uint32_t op2, int Rd);
+uint32_t rsb(state *s, uint32_t op1, uint32_t op2, int Rd);
+uint32_t add(state *s, uint32_t op1, uint32_t op2, int Rd);
+uint32_t tst(state *s, uint32_t op1, uint32_t op2);
+uint32_t teq(state *s, uint32_t op1, uint32_t op2);
+uint32_t cmp(state *s, uint32_t op1, uint32_t op2);
+uint32_t orr(state *s, uint32_t op1, uint32_t op2, int Rd);
+uint32_t mov(state *s, uint32_t op2, int Rd);
+
+void data_process(uint32_t inst, state *s);
 
 #endif /* DATA_PROCESS_H_ */
