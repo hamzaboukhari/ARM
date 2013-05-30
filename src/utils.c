@@ -15,7 +15,7 @@
 #include "data_transfer.h"
 
 cycle initCycle(void){
- cycle c = {.current_instr = 1, .prev_instr = 0, .type = 0};
+ cycle c = {.current_instr = 1, .prev_instr = 1, .type = 0};
  return c;
 }
 
@@ -47,7 +47,7 @@ void printRegisters(state s){
  }
  printf("\n");
 
- printf("PC: \t ");
+ printf("PC: \t(%d) ",s.PC);
  printHex(s.PC );
 
  printf("CPSR: \t ");
@@ -200,26 +200,26 @@ void flagCheck(int bit, int status, state *s,uint32_t instr){
 
  if(bit == 2){
   if(Z_bitCheck == status){
-   printf("cond1 \n");
+  // printf("cond1 \n");
    runInstruction(instr,s);
   }
  }else if(bit == 3){
   if(N_bitCheck == status){
-   printf("cond2 \n");
+  // printf("cond2 \n");
    runInstruction(instr,s);
   }
  }else if((bit == 4) && (status == 0)){
   if((Z_bitCheck == 0) && (N_bitCheck == V_bitCheck)){
-   printf("cond3\n");
+  // printf("cond3\n");
    runInstruction(instr,s);
   }
  }else if((bit == 4) && (status == 1)){
   if((Z_bitCheck == 1) || (N_bitCheck != V_bitCheck)){
-   printf("cond4 \n");
+  // printf("cond4 \n");
    runInstruction(instr,s);
   }
  }else if((bit == 0) && (status == 0)){
-   printf("cond5 \n");
+  // printf("cond5 \n");
    runInstruction(instr,s);
  }else{
   perror("Invalid method call \n");
@@ -232,8 +232,7 @@ void execute(state *s, uint32_t instr){
  enum status {LOW = 0, HIGH = 1};
 
  uint8_t cond = getCond(instr);
- printf("The instruction: 0x%x \n", instr);
- printf("The cond: %d \n", cond);
+ //printf("The cond: %d \n", cond);
  switch(cond){
 
  case(14) : flagCheck(NORMAL,LOW,s,instr); break;
@@ -248,15 +247,32 @@ void execute(state *s, uint32_t instr){
  }
 }
 
-//Need to work on this:
+uint32_t getIndex(state s){
+ return (s.PC)/4;
+}
+
+//Initally the current_inst and prev_inst = 0x1,
+//to enter the while loop;
 void start(state *s,cycle *c){
- while(c -> current_instr != 0x00000000){
-  s -> PC += 4;
-  c -> current_instr = c -> prev_instr;
-  s -> PC += 4;
-  uint32_t PC_val = s -> PC;
-  c -> prev_instr = s -> data_mem[PC_val/4];
-  printf("0x%x\n",PC_val);
-  execute(s,c -> current_instr);
+ int i=0;
+ printf("PC initially: 0x%x \n",s -> PC);
+ while(c -> prev_instr != 0x00000000){
+   uint32_t current_inst = c -> current_instr;
+   if(checkB(current_inst)){
+	initCycle();
+	c -> prev_instr = s -> data_mem[i];
+	s -> PC += 4;
+	i++;
+   }else{
+	c -> current_instr = c -> prev_instr;
+	c -> prev_instr = s -> data_mem[i];
+	s -> PC += 4;
+	c -> current_instr = c -> prev_instr;
+	c -> prev_instr = s -> data_mem[i+1];
+	s -> PC += 4;
+	execute(s,c -> current_instr);
+	i++;
+   }
  }
+ printf("Number of times loop is executed: %d \n",i);
 }

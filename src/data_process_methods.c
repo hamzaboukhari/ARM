@@ -229,7 +229,7 @@ void data_process(uint32_t inst, state *s){
 	 //Run S Check
 
 	 updateNZinCPSR(s,res,S);
-	 s->CPSR = setBit(s->CPSR,29,C);
+	 if(S==1){ s->CPSR = setBit(s->CPSR,29,C); }
 
 
 }

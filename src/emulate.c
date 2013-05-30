@@ -13,8 +13,8 @@
 
 int main(void){
  long size;
- uint32_t instr = 0xE3A01001;
- FILE *fp = fopen("add01","rb");
+ //int32_t instr = 0xE3A01001;
+ FILE *fp = fopen("tests/add01","rb");
  state current_state;
  cycle current_cycle;
  if(fp == NULL){
@@ -29,8 +29,8 @@ int main(void){
  fseek(fp, 0, SEEK_SET);
  fread(current_state.data_mem, 4, sizeof(uint32_t)*100, fp);
  fclose(fp);
- execute(&current_state,instr);
- //start(&current_state,&current_cycle);
+ //execute(&current_state,instr);
+ start(&current_state,&current_cycle);
  printRegisters(current_state);
  printf("\n");
  //printFile_Memory(current_state);
