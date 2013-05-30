@@ -1,86 +1,37 @@
+/*
+ * structs.c
+ *
+ *  Created on: 28 May 2013
+ *      Author: Pavan
+ */
+
+#include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
-#include <string.h>
-
-int main(int argc, char **argv) {
-  return EXIT_SUCCESS;
+#include "utils.h"
 
 
-  void checkCond(uint32_t i) {
-	  int bit31 = bitCheck(i, 31);
-	  int bit30 = bitCheck(i, 30);
-	  int bit29 = bitCheck(i, 29);
-	  int bit28 = bitCheck(i, 28);
+int main(void){
+ long size;
+ uint32_t instr = 0xE481000C;
+ FILE *fp = fopen("add01","rb");
+ state current_state;
+ cycle current_cycle;
+ if(fp == NULL){
+  perror("File not found");
+  exit(EXIT_FAILURE);
+ }
+ current_state = initState(); // initialises states (sets registers to 0);
+ current_cycle = initCycle(); // initialises cycle
 
-	  char cond;
-	  sprintf(cond, "%i%i%i%i", bit31, bit30, bit29, bit28);
-	  int CPSR[32];
-
-	  if (strcmp(cond, '0000') == 0) {
-		  if (CPSR[1] == 1) {
-			  checkInstruction(i);
-		  }
-  	  } else if (strcmp(cond, '0001') == 0) {
-  		  if (CPSR[1] == 0) {
-  			  checkInstruction(i);
-  		  }
-  	  } else if (strcmp(cond, '1010') == 0) {
-  		  if (CPSR[0] == CPSR[3]) {
-  			  checkInstruction(i);
-  		  }
-  	  } else if (strcmp(cond, '1011') == 0) {
-  		  if (CPSR[0] != CPSR[3]) {
-  			  checkInstruction(i);
-  		  }
-  	  } else if (strcmp(cond, '1100') == 0) {
-  		  if (CPSR[1] == 0 & CPSR[0] == CPSR[3]) {
-  			  checkInstruction(i);
-  		  }
-  	  } else if (strcmp(cond, '1101') == 0) {
-  		  if (CPSR[1] == 1 | CPSR[0] != CPSR[3]) {
-  			  checkInstruction(i);
-  		  }
-  	  } else if (strcmp(cond, '1110') == 0) {
-  		      checkInstruction(i);
-  	  }
-
-  }
-
-
-  void checkInstruction(uint32_t i) {
-	  int bit27 = bitCheck(i, 27);
-	  int bit26 = bitCheck(i, 26);
-
-	  char str;
-	  sprintf(str, "%i%i", bit27, bit26);
-
-	  if (strcmp(str, '00') == 0) {
-		  //Data Processing/Multiply
-	  } else if (strcmp(str, '01') == 0) {
-		  //Single Data Transfer
-	  } else if (strcmp(str, '10') == 0) {
-		  //Branch
-	  }
-
-  }
-
-  int binaryToDecimal(uint32_t i) {
-	  int sum = 0;
-	  for (int k = i ; k < 32 ; k++) {
-		if (bitCheck(i, k) == 1) {
-		  sum += 2^k;
-		}
-	  }
-	  return sum;
-
-  }
-
-  uint32_t rotateLeft(uint32_t i, int bits) {
-    return ((i << bits) | (i >> (32 - bits)));
-  }
-
-  uint32_t rotateRight(uint32_t i, int bits) {
-    return ((i >> bits) | (i << (32 - bits)));
-  }
-
+ fseek(fp, 0, SEEK_END);
+ size = ftell(fp); // number of instructions
+ fseek(fp, 0, SEEK_SET);
+ fread(current_state.data_mem, 4, sizeof(uint32_t)*100, fp);
+ fclose(fp);
+ execute(&current_state,instr);
+ //printRegisters(current_state);
+ printf("\n");
+ //printFile_Memory(current_state);
+ return 0;
 }
