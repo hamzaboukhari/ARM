@@ -57,5 +57,6 @@ int main(int argc, char **argv){
  printf("\n");
  //printFile_Memory(current_state);
  //printFile_Memory(current_state);
+ //printARM_Memory(&current_state);
  return 0;
 }

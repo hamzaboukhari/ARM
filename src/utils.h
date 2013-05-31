@@ -27,7 +27,7 @@ typedef struct pipeline{
 state initState(void);
 cycle initCycle(void);
 void printRegisters(state s);
-void execute(state *s,uint32_t instr);
+void execute(state *s,cycle *c,uint32_t instr);
 void start(state *s,cycle *c);
 void writeRegisters(state s);
 uint32_t getBits(uint32_t x,int initial, int final);

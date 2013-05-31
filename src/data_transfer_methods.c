@@ -82,7 +82,7 @@ void writeReg(state *s, uint32_t r, uint32_t val){
 }
 
 void writeMem(state *s, uint32_t rd_Val, uint32_t mem_loc){
- s -> ARM_mem[mem_loc] = rd_Val;
+ s -> ARM_mem[mem_loc/4] = rd_Val;
 }
 
 //-----------------------------------------------------------------------
@@ -96,29 +96,33 @@ void pre(state *s,int U_Bit,int L_Bit,uint32_t inst){
  uint32_t rdValue = getContents(s,rd);
 
  printf("Contents of r%d before (source): 0x%x \n",rn,rnValue);
- printf("Contents of r%d before (dest)  : 0x%x \n",rd,rdValue);
+ printf("Contents of r%d before (value)  : 0x%x \n",rd,rdValue);
 
  if(U_Bit == 1){
   printf("UBit = 1 \n");
   uint32_t memLoc = getContents(s,rn)+offset;
   printf("Memory Loc: 0x%x\n",memLoc);
+  //mem[r1Val+(offset)] = r0Val
+  //offset = r2Val * #
+
+  //r0Val = mem[all that shit];
   switch(L_Bit){
-   case(0) :  writeReg(s,rd,s -> ARM_mem[memLoc]);printf("Case 0\n"); break; // Sets the dest reg with rn current mem value;
-   case(1) :  writeMem(s,rdValue,memLoc);printf("Case 1\n"); break;
+   case(1) :  writeReg(s,rd,s -> ARM_mem[memLoc]);printf("Case 1\n"); break; // Sets the dest reg with rn current mem value;
+   case(0) :  writeMem(s,rdValue,memLoc);printf("Case 0\n"); break;
    default : perror("Error in pre"); break;
   }
 
  }else{
   uint32_t memLoc = getContents(s,rn)-offset;
   switch(L_Bit){
-   case(0) :  writeReg(s,rd,s -> ARM_mem[memLoc]); break; // Sets the dest reg with rn current mem value;
-   case(1) :  writeMem(s,rdValue,memLoc); break;
+   case(1) :  writeReg(s,rd,s -> ARM_mem[memLoc]); break; // Sets the dest reg with rn current mem value;
+   case(0) :  writeMem(s,rdValue,memLoc); break;
    default : perror("Error in pre"); break;
   }
  }
 
  printf("Contents of r%d after (source): 0x%x \n",rn,getContents(s,rn));
- printf("Contents of r%d after (dest)  : 0x%x \n",rd,getContents(s,rd));
+ printf("Contents of r%d after (val)  : 0x%x \n",rd,getContents(s,rd));
 
 }
 
@@ -141,15 +145,15 @@ void post(state *s,int U_Bit,int L_Bit,uint32_t inst){
  if(U_Bit == 1){
   printf("UBit = 1 \n");
   switch(L_Bit){
-   case(0) :  writeReg(s,rd,s -> ARM_mem[memLoc]); add_offset(s,rn,offset); break;
-   case(1) :  writeMem(s,rdValue,memLoc); add_offset(s,rn,offset); break;
+   case(1) :  writeReg(s,rd,s -> ARM_mem[memLoc]); add_offset(s,rn,offset); break;
+   case(0) :  writeMem(s,rdValue,memLoc); add_offset(s,rn,offset); break;
    default : perror("Error in post"); break;
   }
  }else{
   printf("UBit = 0 \n");
   switch(L_Bit){
-   case(0) :  writeReg(s,rd,s -> ARM_mem[memLoc]); add_offset(s,rn,offset); break;
-   case(1) :  writeMem(s,rdValue,memLoc); subtract_offset(s,rn,offset); break;
+   case(1) :  writeReg(s,rd,s -> ARM_mem[memLoc]); add_offset(s,rn,offset); break;
+   case(0) :  writeMem(s,rdValue,memLoc); subtract_offset(s,rn,offset); break;
    default : perror("Error in post"); break;
   }
  }

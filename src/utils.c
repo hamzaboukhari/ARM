@@ -21,7 +21,7 @@ cycle initCycle(void){
 
 state initState(void) {
  state st = {.PC = 0, .SP = 0, .LR = 0, .CPSR = 0, .reg = {0}};
- st.ARM_mem  = calloc(sizeof(uint32_t) * 100,4);
+ st.ARM_mem  = calloc(sizeof(uint32_t) * 4096,4);
  return st;
  }
 
@@ -62,8 +62,10 @@ void outputStateTEMP(state s){
 
  printf("Non-Zero Memory: \n");
  int j=0;
- while(s.ARM_mem[j] != 0x0){
-  printf("%d:\t 0x%x \n",4*j,s.ARM_mem[j]);
+ while(j < 0x1000){
+  if(s.ARM_mem[j] != 0){
+   printf("%d:\t 0x%x \n",4*j,s.ARM_mem[j]);
+  }
   j++;
  }
  printf("\n\n");
@@ -106,16 +108,18 @@ void outputState(state s, FILE *fp){
 
  printf("Non-Zero Memory: \n");
  int j=0;
- while(s.ARM_mem[j] != 0x0){
-  printf("%d:\t 0x%x \n",4*j,s.ARM_mem[j]);
-  fprintf(fp,"%d:\t 0x%x \n",4*j,s.ARM_mem[j]);
+ while(j < 4096){
+  if(s.ARM_mem[j] != 0){
+   printf("%d:\t 0x%x \n",4*j,s.ARM_mem[j]);
+   fprintf(fp,"%d:\t 0x%x \n",4*j,s.ARM_mem[j]);
+  }
   j++;
  }
 }
 
 
 void printARM_Memory(state s){
- for(int j=0; j<100; j++){
+ for(int j=0; j<4096; j++){
   printf("Memory #%d : 0x%x \n", j, s.ARM_mem[j]);
  }
 }
@@ -246,7 +250,7 @@ void flagCheck(int bit, int status, state *s,uint32_t instr){
 }
 */
 
-void execute(state *s, uint32_t inst){
+void execute(state *s,cycle *c, uint32_t inst){
 	printf("Executing An Instruction...\n\n");
 
 	enum bit {eq=0,ne=1,ge=10,lt=11,gt=12,le=13,al=14};
@@ -259,21 +263,23 @@ void execute(state *s, uint32_t inst){
 	int V = bitCheck(s->CPSR,28);
 
 	if(cond == eq && Z == 1){ printf("Cond: eq\n");
-		runInstruction(inst,s);
+		runInstruction(inst,s,c);
 	} else if(cond == ne && Z == 0){ printf("Cond: ne\n");
-		runInstruction(inst,s);
+		runInstruction(inst,s,c);
 	} else if(cond == ge && N == V){ printf("Cond: ge\n");
-		runInstruction(inst,s);
+		runInstruction(inst,s,c);
 	} else if(cond == lt && N != V){ printf("Cond: lt\n");
-		runInstruction(inst,s);
+		runInstruction(inst,s,c);
 	} else if(cond == gt && (Z == 0 && N == V)){ printf("Cond: gt\n");
-		runInstruction(inst,s);
+		runInstruction(inst,s,c);
 	} else if(cond == le && (Z == 1 || N != V)){ printf("Cond: le\n");
-		runInstruction(inst,s);
+		runInstruction(inst,s,c);
 	} else if(cond == al){ printf("Cond: al\n");
-		runInstruction(inst,s);
+		runInstruction(inst,s,c);
 	} else { printf("Cond: N/A\n");
-
+		if(checkB(inst)){
+			s -> PC += 4;
+		}
 	}
 
 /*
@@ -306,16 +312,15 @@ printf("Started...");
  while(c -> current_instr != 0x0){
    uint32_t current_inst = c -> current_instr;
    if(checkB(current_inst)){
-	   printf("Branch Detected...\n");
-	execute(s,c -> current_instr);
-	c -> prev_instr = 0x1;
-	c -> current_instr = 0x01;
+	printf("Branch Detected...\n");
+	c -> current_instr = c -> prev_instr;
 	c -> prev_instr = s -> ARM_mem[(s -> PC)/4];
+	execute(s,c,current_inst);
 	//s -> PC += 4;
 	//i++;
    }else{
-	   printf("Non-Branch Detected...\n");
-	execute(s,c -> current_instr);
+	printf("Non-Branch Detected...\n");
+	execute(s,c,c -> current_instr);
 	c -> current_instr = c -> prev_instr;
 	c -> prev_instr = s -> ARM_mem[(s -> PC)/4];
 	s -> PC += 4;
