@@ -29,9 +29,12 @@ int main(int argc, char **argv){
 
  printf("Input File Path: %s\n",input_buffer);
  printf("Output File Path: %s\n\n",output_buffer);
+ printf("Running...\n");
 
  FILE *fp = fopen(input_buffer,"rb");
+ printf("Opening file...\n");
  FILE *out = fopen(output_buffer,"w");
+ printf("Set buffer...\n");
  state current_state;
  cycle current_cycle;
  if(fp == NULL){
@@ -47,7 +50,9 @@ int main(int argc, char **argv){
  fread(current_state.ARM_mem, 4, sizeof(uint32_t)*100, fp);
  fclose(fp);
  //execute(&current_state,instr);
+ printf("Executing...\n");
  start(&current_state,&current_cycle);
+ printf("Finished...\n\n");
  outputState(current_state,out);
  printf("\n");
  //printFile_Memory(current_state);

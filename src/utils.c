@@ -84,7 +84,7 @@ void outputState(state s, FILE *fp){
 
 
 void printARM_Memory(state s){
- for(int j=0; j<4096; j++){
+ for(int j=0; j<100; j++){
   printf("Memory #%d : 0x%x \n", j, s.ARM_mem[j]);
  }
 }
@@ -153,20 +153,8 @@ uint32_t addBinary(uint32_t op1, uint32_t op2){
     return result;
  }
 
-uint32_t negBit(uint32_t i,int n){
-	if(bitCheck(i,n)==1){
-		i = setBit(i,n,0);
-	} else if(bitCheck(i,n)==0){
-		i = setBit(i,n,1);
-	}
-	return i;
-}
-
 uint32_t negBinary(uint32_t i){
-for(int k=0;k<32;k++){
-i = negBit(i,k);
-}
-return addBinary(i,1);
+	return ~i + 1;
 }
 
 void updateNZinCPSR(state *s, uint32_t res, int S){
@@ -246,28 +234,25 @@ void execute(state *s, uint32_t instr){
  }
 }
 
-uint32_t getIndex(state s){
- return (s.PC)/4;
-}
-
 //Initally the current_inst and prev_inst = 0x1,
 //to enter the while loop;
 void start(state *s,cycle *c){
- int i=0;
+printf("Started...");
+ //int i=0;
  while(c -> current_instr != 0x0){
    uint32_t current_inst = c -> current_instr;
    if(checkB(current_inst)){
 	initCycle();
-	c -> prev_instr = s -> ARM_mem[i];
+	c -> prev_instr = s -> ARM_mem[(s -> PC)/4];
 	s -> PC += 4;
-	i++;
+	//i++;
    }else{
 	c -> current_instr = c -> prev_instr;
-	c -> prev_instr = s -> ARM_mem[i];
+	c -> prev_instr = s -> ARM_mem[(s -> PC)/4];
 	s -> PC += 4;
 	execute(s,c -> current_instr);
-	i++;
+	//i++;
    }
  }
- printf("Number of times loop is executed: %d \n",i);
+ printf("Number of times loop is executed: %d \n",(s -> PC)/4);
 }

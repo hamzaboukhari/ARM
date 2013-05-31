@@ -66,14 +66,14 @@ int getInstruction(uint32_t i){
 void runInstruction(uint32_t inst, state *s){
 	enum instructionType {DP = 1, M = 2, SDT = 3, B = 4};
 
-	/*
+
 	switch(getInstruction(inst)){
 		case(DP)  : data_process(inst,s); break;
 		case(M)   : multiply(inst,s); break;
 		case(SDT) : data_transfer(inst,s); break;
 		case(B)   : branch(inst,s); break;
 	}
-	*/
+
 
 	//debugger:
 	switch(getInstruction(inst)){
