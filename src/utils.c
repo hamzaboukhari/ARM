@@ -242,7 +242,9 @@ printf("Started...");
  while(c -> current_instr != 0x0){
    uint32_t current_inst = c -> current_instr;
    if(checkB(current_inst)){
-	initCycle();
+	execute(s,c -> current_instr);
+	c -> prev_instr = 0x1;
+	c -> current_instr = 0x01;
 	c -> prev_instr = s -> ARM_mem[(s -> PC)/4];
 	s -> PC += 4;
 	//i++;
