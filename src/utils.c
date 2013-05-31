@@ -21,8 +21,7 @@ cycle initCycle(void){
 
 state initState(void) {
  state st = {.PC = 0, .SP = 0, .LR = 0, .CPSR = 0, .reg = {0}};
- st.data_mem = calloc(sizeof(uint32_t) * 100,4);
- st.ARM_mem  = calloc(sizeof(uint32_t) * 4096,4);
+ st.ARM_mem  = calloc(sizeof(uint32_t) * 100,4);
  return st;
  }
 
@@ -39,32 +38,50 @@ void printHex(uint32_t x){
  printf("0x%x \n",x);
 }
 
-void printRegisters(state s){
- printf("Registers: \n\n");
+void outputState(state s, FILE *fp){
+ printf("Registers: \n");
  for(int i=0; i<13; i++){
-  printf("Register %d\t ", i);
+  printf("$%d:\t %d \t", i,s.reg[i]);
   printHex(s.reg[i]);
+
+  fprintf(fp,"$%d:\t %d \t", i,s.reg[i]);
+  fprintf(fp,"0x%x \n",s.reg[i]);
  }
  printf("\n");
-
+ fprintf(fp,"\n");
+ //------------------------
  printf("PC: \t(%d) ",s.PC);
  printHex(s.PC );
-
+ fprintf(fp,"PC: \t %d ",s.PC);
+ fprintf(fp," \t0x%x \n",s.PC);
+ //------------------------
  printf("CPSR: \t ");
  printHex(s.CPSR);
-
+ fprintf(fp,"CPSR: \t %d ",s.CPSR);
+ fprintf(fp," \t0x%x \n",s.CPSR);
+ //------------------------
  printf("LR: \t ");
  printHex(s.LR);
-
+ fprintf(fp,"LR: \t %d",s.LR);
+ fprintf(fp," \t0x%x \n",s.LR);
+ //------------------------
  printf("SP: \t ");
  printHex(s.SP);
-}
+ fprintf(fp,"SP: \t %d ",s.SP);
+ fprintf(fp," \t0x%x \n",s.SP);
+ //------------------------
+ printf("\n");
+ fprintf(fp,"\n");
 
-void printFile_Memory(state s){
- for(int j=0; j<100; j++){
-  printf("Memory #%d : 0x%x \n", j, s.data_mem[j]);
+ printf("Non-Zero Memory: \n");
+ int j=0;
+ while(s.ARM_mem[j] != 0x0){
+  printf("%d:\t 0x%x \n",4*j,s.ARM_mem[j]);
+  fprintf(fp,"%d:\t 0x%x \n",4*j,s.ARM_mem[j]);
+  j++;
  }
 }
+
 
 void printARM_Memory(state s){
  for(int j=0; j<4096; j++){
@@ -72,29 +89,9 @@ void printARM_Memory(state s){
  }
 }
 
-void fprintHex(FILE *fp,uint32_t val){
- fprintf(fp,"0x%x \n",val);
-}
-
-void writeRegisters(state s){
+void writeState(state s){
  FILE *fp = fopen("add01.out","w");
- for(int i=0; i<13; i++){
-   fprintf(fp, "Register %d\t ", i);
-   fprintHex(fp, s.reg[i]);
-  }
-  fprintf(fp, "\n");
-
-  fprintf(fp,"PC: \t ");
-  fprintHex(fp, s.PC);
-
-  fprintf(fp,"CPSR: \t ");
-  fprintHex(fp, s.CPSR); //prints only the first bit of CPSR;
-
-  fprintf(fp,"LR: \t ");
-  fprintHex(fp, s.LR);
-
-  fprintf(fp, "SP: \t ");
-  fprintHex(fp, s.SP);
+ fwrite(stdout,200,1000,fp);
 }
 
 
@@ -173,7 +170,6 @@ return addBinary(i,1);
 }
 
 void updateNZinCPSR(state *s, uint32_t res, int S){
-
 	int N;
 	int Z;
 
@@ -258,17 +254,16 @@ uint32_t getIndex(state s){
 //to enter the while loop;
 void start(state *s,cycle *c){
  int i=0;
- printf("PC initially: 0x%x \n",s -> PC);
- while(c -> current_instr != 0x00000000){
+ while(c -> current_instr != 0x0){
    uint32_t current_inst = c -> current_instr;
    if(checkB(current_inst)){
 	initCycle();
-	c -> prev_instr = s -> data_mem[i];
+	c -> prev_instr = s -> ARM_mem[i];
 	s -> PC += 4;
 	i++;
    }else{
 	c -> current_instr = c -> prev_instr;
-	c -> prev_instr = s -> data_mem[i];
+	c -> prev_instr = s -> ARM_mem[i];
 	s -> PC += 4;
 	execute(s,c -> current_instr);
 	i++;

@@ -11,10 +11,27 @@
 #include "utils.h"
 
 
-int main(void){
+int main(int argc, char **argv){
  long size;
  //int32_t instr = 0xE3A01001;
- FILE *fp = fopen("tests/and01","rb");
+
+ char input_buffer[100];
+ char output_buffer[100];
+ char fileName[80];
+ scanf("%s",fileName);
+
+ char *input_file   =  fileName;
+ strcpy(input_buffer,"tests/");
+ strcat(input_buffer,input_file);
+
+ strcpy(output_buffer,"results/");
+ strcat(output_buffer,strcat(input_file,".out"));
+
+ printf("Input File Path: %s\n",input_buffer);
+ printf("Output File Path: %s\n\n",output_buffer);
+
+ FILE *fp = fopen(input_buffer,"rb");
+ FILE *out = fopen(output_buffer,"w");
  state current_state;
  cycle current_cycle;
  if(fp == NULL){
@@ -27,11 +44,11 @@ int main(void){
  fseek(fp, 0, SEEK_END);
  size = ftell(fp); // number of instructions
  fseek(fp, 0, SEEK_SET);
- fread(current_state.data_mem, 4, sizeof(uint32_t)*100, fp);
+ fread(current_state.ARM_mem, 4, sizeof(uint32_t)*100, fp);
  fclose(fp);
  //execute(&current_state,instr);
  start(&current_state,&current_cycle);
- printRegisters(current_state);
+ outputState(current_state,out);
  printf("\n");
  //printFile_Memory(current_state);
  //printFile_Memory(current_state);

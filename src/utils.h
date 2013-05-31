@@ -10,7 +10,7 @@
 
 typedef struct states{
  uint32_t PC;
- uint32_t *data_mem; //where contents of the binary file are loaded;
+ //uint32_t *data_mem; //where contents of the binary file are loaded;
  uint32_t *ARM_mem;  //emulated memory of an ARM machine;
  uint32_t CPSR;
  int32_t reg[13];
