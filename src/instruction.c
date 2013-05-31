@@ -77,10 +77,10 @@ void runInstruction(uint32_t inst, state *s){
 
 	//debugger:
 	switch(getInstruction(inst)){
-		case(DP)  : data_process(inst,s); printf("data_process \n"); break;
-		case(M)   : multiply(inst,s); printf("multiply \n"); break;
-		case(SDT) : data_transfer(inst,s);printf("data_transfer \n"); break;
-		case(B)   : branch(inst,s);printf("branch \n"); break;
+		case(DP)  : data_process(inst,s); break;
+		case(M)   : multiply(inst,s); break;
+		case(SDT) : data_transfer(inst,s); break;
+		case(B)   : branch(inst,s); break;
 	}
 
 }

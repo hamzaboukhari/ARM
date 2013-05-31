@@ -122,7 +122,9 @@ uint32_t getOp2(state *s, uint32_t inst, int I){
 
 	 if(I == 1){
 		//Operand2 is an immediate value
+		//printf("inst: %d \n", inst);
 		op2 = rotateRight(getBits(inst,0,7),2*getBits(inst,8,11));
+		//printf("op2: %d \n", op2);
 	 } else {
 		//Operand2 is a register
 		int Rm = getBits(inst,0,11);
@@ -174,7 +176,7 @@ uint32_t getOpCode(uint32_t inst){
 
 void data_process(uint32_t inst, state *s){
 
-	 uint32_t op1 = getBits(inst,16,19);
+	 uint32_t op1 = s->reg[getBits(inst,16,19)];
 	 uint32_t op2;
 
 	 int opcode = getOpCode(inst);
@@ -186,6 +188,30 @@ void data_process(uint32_t inst, state *s){
 
 	 op2 = getOp2(s,inst,I);
 	 C = getOp2Carry(s,inst,I);
+
+	 /*
+	 	 //____________Test Instruction____________
+	 	 //                           Operand2
+	 	 //Cond 00 I OpC. S Rn   Rd   Rot. Imm. Val
+	 	 //1110 00 1 0001 1 0000 0001 0001 00000001
+
+	 	 //debugger:
+	 	 printf("\nRunning Data Processing Instruction: ");
+	 	 switch(opcode){
+	 	 	  case(0) : printf("and\n");break;
+	 	 	  case(1) : printf("eor\n");break;
+	 	 	  case(2) : printf("sub\n");break;
+	 	 	  case(3) : printf("rsb\n");break;
+	 	 	  case(4) : printf("add\n");break;
+	 	 	  case(8) : printf("tst\n");break;
+	 	 	  case(9) : printf("teq\n");break;
+	 	 	  case(10): printf("cmp\n");break;
+	 	 	  case(12): printf("orr\n");break;
+	 	 	  case(13): printf("mov\n");break;
+	 	 	  default: perror("data_process opcode error\n");break;
+	 	 }
+	  */
+	 	 //printRegisters(*s);
 
 	 switch(opcode){
 	  case(0) : res = and(s,op1,op2,Rd);break;
@@ -201,33 +227,11 @@ void data_process(uint32_t inst, state *s){
 	  default: perror("data_process opcode error\n");break;
 	 }
 
-	 /*
-	 //____________Test Instruction____________
-	 //                           Operand2
-	 //Cond 00 I OpC. S Rn   Rd   Rot. Imm. Val
-	 //1110 00 1 0001 1 0000 0001 0001 00000001
+	 	 //debugger:
+	 	 //printf("Result: ");printHex(res);
 
-	 //debugger:
-	 printf("\nRunning Data Processing Instruction: ");
-	 switch(opcode){
-	 	  case(0) : printf("and\n");break;
-	 	  case(1) : printf("eor\n");break;
-	 	  case(2) : printf("sub\n");break;
-	 	  case(3) : printf("rsb\n");break;
-	 	  case(4) : printf("add\n");break;
-	 	  case(8) : printf("tst\n");break;
-	 	  case(9) : printf("teq\n");break;
-	 	  case(10): printf("cmp\n");break;
-	 	  case(12): printf("orr\n");break;
-	 	  case(13): printf("mov\n");break;
-	 	  default: perror("data_process opcode error\n");break;
-	 }printf("Result: ");printHex(res);
-
-	 printRegisters(*s);
-	 */
 
 	 //Run S Check
-
 	 updateNZinCPSR(s,res,S);
 	 if(S==1){ s->CPSR = setBit(s->CPSR,29,C); }
 
