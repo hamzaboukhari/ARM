@@ -38,6 +38,37 @@ void printHex(uint32_t x){
  printf("0x%x \n",x);
 }
 
+void outputStateTEMP(state s){
+ printf("Registers: \n");
+ for(int i=0; i<13; i++){
+  printf("$%d:\t %d \t", i,s.reg[i]);
+  printHex(s.reg[i]);
+ }
+ printf("\n");
+ //------------------------
+ printf("PC: \t(%d) ",s.PC);
+ printHex(s.PC );
+ //------------------------
+ printf("CPSR: \t ");
+ printHex(s.CPSR);
+ //------------------------
+ printf("LR: \t ");
+ printHex(s.LR);
+ //------------------------
+ printf("SP: \t ");
+ printHex(s.SP);
+ //------------------------
+ printf("\n");
+
+ printf("Non-Zero Memory: \n");
+ int j=0;
+ while(s.ARM_mem[j] != 0x0){
+  printf("%d:\t 0x%x \n",4*j,s.ARM_mem[j]);
+  j++;
+ }
+ printf("\n\n");
+}
+
 void outputState(state s, FILE *fp){
  printf("Registers: \n");
  for(int i=0; i<13; i++){
@@ -173,7 +204,7 @@ void updateNZinCPSR(state *s, uint32_t res, int S){
 	 }
 }
 
-
+/*
 //this method is only called if the flag bits match;
 //N,Z,C,V - 0,1,2,3 indexes;
 void flagCheck(int bit, int status, state *s,uint32_t instr){
@@ -187,34 +218,65 @@ void flagCheck(int bit, int status, state *s,uint32_t instr){
 
  if(bit == 2){
   if(Z_bitCheck == status){
-  // printf("cond1 \n");
+   printf("cond1 \n");
    runInstruction(instr,s);
   }
  }else if(bit == 3){
   if(N_bitCheck == status){
-  // printf("cond2 \n");
+   printf("cond2 \n");
    runInstruction(instr,s);
   }
  }else if((bit == 4) && (status == 0)){
   if((Z_bitCheck == 0) && (N_bitCheck == V_bitCheck)){
-  // printf("cond3\n");
+   printf("cond3\n");
    runInstruction(instr,s);
   }
  }else if((bit == 4) && (status == 1)){
   if((Z_bitCheck == 1) || (N_bitCheck != V_bitCheck)){
-  // printf("cond4 \n");
+   printf("cond4 \n");
    runInstruction(instr,s);
   }
  }else if((bit == 0) && (status == 0)){
-  // printf("cond5 \n");
+   printf("cond5 \n");
    runInstruction(instr,s);
  }else{
   perror("Invalid method call \n");
   exit(EXIT_FAILURE);
  }
 }
+*/
 
-void execute(state *s, uint32_t instr){
+void execute(state *s, uint32_t inst){
+	printf("Executing An Instruction...\n\n");
+
+	enum bit {eq=0,ne=1,ge=10,lt=11,gt=12,le=13,al=14};
+
+	uint32_t cond = getBits(inst,28,31);
+
+	int N = bitCheck(s->CPSR,31);
+	int Z = bitCheck(s->CPSR,30);
+	int C = bitCheck(s->CPSR,29);
+	int V = bitCheck(s->CPSR,28);
+
+	if(cond == eq && Z == 1){ printf("Cond: eq\n");
+		runInstruction(inst,s);
+	} else if(cond == ne && Z == 0){ printf("Cond: ne\n");
+		runInstruction(inst,s);
+	} else if(cond == ge && N == V){ printf("Cond: ge\n");
+		runInstruction(inst,s);
+	} else if(cond == lt && N != V){ printf("Cond: lt\n");
+		runInstruction(inst,s);
+	} else if(cond == gt && (Z == 0 && N == V)){ printf("Cond: gt\n");
+		runInstruction(inst,s);
+	} else if(cond == le && (Z == 1 || N != V)){ printf("Cond: le\n");
+		runInstruction(inst,s);
+	} else if(cond == al){ printf("Cond: al\n");
+		runInstruction(inst,s);
+	} else { printf("Cond: N/A\n");
+
+	}
+
+/*
  enum bit {NORMAL = 0, ZERO = 2, NEG = 3, OTHER = 4};
  enum status {LOW = 0, HIGH = 1};
 
@@ -231,7 +293,9 @@ void execute(state *s, uint32_t instr){
  case(12) : flagCheck(OTHER,LOW,s,instr); break;
  case(13) : flagCheck(OTHER,HIGH,s,instr); break;
  default  : printf("wont be executed \n"); break;
+
  }
+ */
 }
 
 //Initally the current_inst and prev_inst = 0x1,
@@ -242,19 +306,23 @@ printf("Started...");
  while(c -> current_instr != 0x0){
    uint32_t current_inst = c -> current_instr;
    if(checkB(current_inst)){
+	   printf("Branch Detected...\n");
 	execute(s,c -> current_instr);
 	c -> prev_instr = 0x1;
 	c -> current_instr = 0x01;
 	c -> prev_instr = s -> ARM_mem[(s -> PC)/4];
-	s -> PC += 4;
+	//s -> PC += 4;
 	//i++;
    }else{
+	   printf("Non-Branch Detected...\n");
+	execute(s,c -> current_instr);
 	c -> current_instr = c -> prev_instr;
 	c -> prev_instr = s -> ARM_mem[(s -> PC)/4];
 	s -> PC += 4;
-	execute(s,c -> current_instr);
 	//i++;
    }
+
+   outputStateTEMP(*s);
  }
  printf("Number of times loop is executed: %d \n",(s -> PC)/4);
 }

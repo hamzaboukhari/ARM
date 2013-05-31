@@ -13,7 +13,7 @@
 
 void branch(uint32_t i, state *s) {
 	//printf("Reg val before: %x\n",s -> PC);
-	printf("Executing Branch;");
+	printf("Executing Branch;\n");
 	uint32_t offset = getBits(i, 0, 23);
 	offset = shift(offset, 0, 2);
 	offset = setBits(offset, 26, 31, bitCheck(offset, 25));

@@ -189,14 +189,14 @@ void data_process(uint32_t inst, state *s){
 	 op2 = getOp2(s,inst,I);
 	 C = getOp2Carry(s,inst,I);
 
-	 /*
+
 	 	 //____________Test Instruction____________
 	 	 //                           Operand2
 	 	 //Cond 00 I OpC. S Rn   Rd   Rot. Imm. Val
 	 	 //1110 00 1 0001 1 0000 0001 0001 00000001
 
 	 	 //debugger:
-	 	 printf("\nRunning Data Processing Instruction: ");
+	 	 //printf("\nRunning Data Processing Instruction: ");
 	 	 switch(opcode){
 	 	 	  case(0) : printf("and\n");break;
 	 	 	  case(1) : printf("eor\n");break;
@@ -210,7 +210,7 @@ void data_process(uint32_t inst, state *s){
 	 	 	  case(13): printf("mov\n");break;
 	 	 	  default: perror("data_process opcode error\n");break;
 	 	 }
-	  */
+
 	 	 //printRegisters(*s);
 
 	 switch(opcode){

@@ -38,10 +38,10 @@ uint32_t binaryMultiply(uint32_t op1, uint32_t op2) {
 }
 
 void multiply(uint32_t i, state *s) {
-	s -> reg[12] = 0;
-	s -> reg[0] = 0xFFFFFFFF;
-	s -> reg[1] = 0xFFFFFFFD;
-	s -> reg[2] = 0x0000000F;
+	//s -> reg[12] = 0;
+	//s -> reg[0] = 0xFFFFFFFF;
+	//s -> reg[1] = 0xFFFFFFFD;
+	//s -> reg[2] = 0x0000000F;
 	uint32_t op1 = s -> reg[getBits(i, 0, 3)];
 	uint32_t op2 = s -> reg[getBits(i, 8, 11)];
 	uint32_t op3 = s -> reg[getBits(i, 12, 15)];
