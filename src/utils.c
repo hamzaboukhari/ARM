@@ -130,6 +130,42 @@ void writeState(state s){
 }
 
 
+int detectReg(char *cmd){
+
+	if(!strcmp(cmd,"r0")){
+		return r0;
+	} if(!strcmp(cmd,"r1")){
+		return r1;
+	} if(!strcmp(cmd,"r2")){
+		return r2;
+	} if(!strcmp(cmd,"r3")){
+		return r3;
+	} if(!strcmp(cmd,"r4")){
+		return r4;
+	} if(!strcmp(cmd,"r5")){
+		return r5;
+	} if(!strcmp(cmd,"r6")){
+		return r6;
+	} if(!strcmp(cmd,"r7")){
+		return r7;
+	} if(!strcmp(cmd,"r8")){
+		return r8;
+	} if(!strcmp(cmd,"r9")){
+		return r9;
+	} if(!strcmp(cmd,"r10")){
+		return r10;
+	} if(!strcmp(cmd,"r11")){
+		return r11;
+	} if(!strcmp(cmd,"r12")){
+		return r12;
+	}
+
+}
+
+uint32_t setBinary(int val, int shift){
+	uint32_t binary = val << shift;
+}
+
 uint8_t getCond(uint32_t inst){
  uint32_t mask = 0xF0000000;
  uint32_t res = mask & inst;

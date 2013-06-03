@@ -9,6 +9,6 @@
 #define MULTIPLY_H_
 #include "utils.h"
 
-void multiply(uint32_t i, state *s);
+void emu_multiply(uint32_t i, state *s);
 
 #endif /* MULTIPLY_H_ */

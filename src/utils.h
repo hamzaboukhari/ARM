@@ -8,6 +8,8 @@
 #ifndef UTILS_H_
 #define UTILS_H_
 
+enum Registers {r0,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12};
+
 typedef struct states{
  uint32_t PC;
  //uint32_t *data_mem; //where contents of the binary file are loaded;
