@@ -67,13 +67,13 @@ void runInstruction(uint32_t inst, state *s,cycle *c){
 	enum instructionType {DP = 1, M = 2, SDT = 3, B = 4};
 
 	//debugger:
-		switch(getInstruction(inst)){
+	/*	switch(getInstruction(inst)){
 			case(DP)  : printf("Running Data Process: "); break;
 			case(M)   : printf("Running Multiply\n"); break;
 			case(SDT) : printf("Running Single Data Transfer\n"); break;
 			case(B)   : printf("Running Branch\n"); break;
 		}
-
+   */
 	switch(getInstruction(inst)){
 		case(DP)  : data_process(inst,s); break;
 		case(M)   : multiply(inst,s); break;

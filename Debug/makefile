@@ -23,19 +23,19 @@ endif
 # Add inputs and outputs from these tool invocations to the build variables 
 
 # All Target
-all: ARM
+all: Emu
 
 # Tool invocations
-ARM: $(OBJS) $(USER_OBJS)
+Emu: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: Cross GCC Linker'
-	gcc  -o "ARM" $(OBJS) $(USER_OBJS) $(LIBS)
+	gcc  -o "Emu" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) $(OBJS)$(C_DEPS)$(EXECUTABLES) ARM
+	-$(RM) $(OBJS)$(C_DEPS)$(EXECUTABLES) Emu
 	-@echo ' '
 
 .PHONY: all clean dependents

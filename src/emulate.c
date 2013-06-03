@@ -12,29 +12,12 @@
 
 
 int main(int argc, char **argv){
+
  long size;
- //int32_t instr = 0xE3A01001;
-
- char input_buffer[100];
- char output_buffer[100];
- char fileName[80];
- scanf("%s",fileName);
-
- char *input_file   =  fileName;
- strcpy(input_buffer,"tests/");
- strcat(input_buffer,input_file);
-
- strcpy(output_buffer,"results/");
- strcat(output_buffer,strcat(input_file,".out"));
-
- printf("Input File Path: %s\n",input_buffer);
- printf("Output File Path: %s\n\n",output_buffer);
- printf("Running...\n");
-
- FILE *fp = fopen(input_buffer,"rb");
- printf("Opening file...\n");
- FILE *out = fopen(output_buffer,"w");
- printf("Set buffer...\n");
+ FILE *fp = fopen(argv[1],"rb");
+ //printf("Opening file...\n");
+ //FILE *out = fopen("test01.out","w");
+ //printf("Set buffer...\n");
  state current_state;
  cycle current_cycle;
  if(fp == NULL){
@@ -50,11 +33,11 @@ int main(int argc, char **argv){
  fread(current_state.ARM_mem, 4, sizeof(uint32_t)*100, fp);
  fclose(fp);
  //execute(&current_state,instr);
- printf("Executing...\n");
+ //printf("Executing...\n");
  start(&current_state,&current_cycle);
- printf("Finished...\n\n");
- outputState(current_state,out);
- printf("\n");
+ //printf("Finished...\n\n");
+ outputStateTEMP(current_state);
+ //printf("\n");
  //printFile_Memory(current_state);
  //printFile_Memory(current_state);
  //printARM_Memory(&current_state);

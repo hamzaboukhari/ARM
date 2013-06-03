@@ -197,7 +197,7 @@ void data_process(uint32_t inst, state *s){
 
 	 	 //debugger:
 	 	 //printf("\nRunning Data Processing Instruction: ");
-	 	 switch(opcode){
+	 	/* switch(opcode){
 	 	 	  case(0) : printf("and\n");break;
 	 	 	  case(1) : printf("eor\n");break;
 	 	 	  case(2) : printf("sub\n");break;
@@ -210,7 +210,7 @@ void data_process(uint32_t inst, state *s){
 	 	 	  case(13): printf("mov\n");break;
 	 	 	  default: perror("data_process opcode error\n");break;
 	 	 }
-
+*/
 	 	 //printRegisters(*s);
 
 	 switch(opcode){
