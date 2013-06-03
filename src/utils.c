@@ -9,10 +9,10 @@
 #include <stdio.h>
 #include <stdint.h>
 #include "utils.h"
-#include "data_process.h"
-#include "multiply.h"
-#include "branch.h"
-#include "data_transfer.h"
+#include "emu_data_process.h"
+#include "emu_multiply.h"
+#include "emu_branch.h"
+#include "emu_data_transfer.h"
 
 cycle initCycle(void){
  cycle c = {.current_instr = 1, .prev_instr = 1, .type = 0};
