@@ -46,6 +46,7 @@ int main(int argv, char** args){
 
  char ***finalArr = fileTokeniser(resultFromFile,numLines, &table);
  printArray(finalArr[0]);
+
  printArray(finalArr[1]);
  printArray(finalArr[2]);
  printArray(finalArr[3]);
