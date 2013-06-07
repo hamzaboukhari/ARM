@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include <string.h>
 #include "LinkedList.h"
+#include "leak_detector_c.h"
 
 
 
@@ -12,7 +13,7 @@ void buildSymTable(table_t *symTable){
 		 	 	 	 "mul", "mla", "ldr", "str", "beq", "bne", "bge", "blt", "bgt", "ble",
                      "b", "lsl", "andeq", "Label"};
 
- int  values[24]    = {and, eor, sub, rsb, add, orr, mov, tst, teq, cmp,
+ int  values[24]    = {and, eor, sub, rsb, Add, orr, mov, tst, teq, cmp,
 	 	 	           mul, mla, ldr, str, beq, bne, bge, blt, bgt, ble,
                        b, lsl, andeq, Label};
 

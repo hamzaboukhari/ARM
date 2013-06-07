@@ -11,6 +11,7 @@
 #include <stdint.h>
 #include "utils.h"
 #include "LinkedList.h";
+#include "leak_detector_c.h"
 
 enum {
 	PC_OFFSET = 8

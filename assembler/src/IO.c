@@ -4,6 +4,7 @@
 #include <string.h>
 #include <stdint.h>
 #include "LinkedList.h"
+#include "leak_detector_c.h"
 
 void readToArray(FILE *fp,char array[100][100]){
  int i=0;

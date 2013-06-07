@@ -10,6 +10,7 @@
 #include <stdint.h>
 #include "utils.h"
 #include "LinkedList.h"
+#include "leak_detector_c.h"
 
 
 void writeToBinaryFile(char *filePath,assembler *assInstState){
@@ -304,6 +305,14 @@ uint32_t setBit(uint32_t i, int n, int newBit){
 		return (i | mask);
 	}
 	return i;
+}
+
+char *prepend(char *initialString,char k){
+ char *result = malloc(sizeof(char)* (strlen(initialString)+1));
+ result[0] = k;
+ strcpy((result+1),initialString);
+ free(initialString);
+ return result;
 }
 
 uint32_t setBits(uint32_t i, int initial, int final, int newBit){

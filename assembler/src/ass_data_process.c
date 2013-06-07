@@ -105,7 +105,7 @@ uint32_t ass_data_process(char *inst[], table_t *table){
 	//printf("Value: %i\n",OpCode);
 	uint32_t res = 14 << 28; //set Cond to 1110 (al)
 
-	/*
+/*
 	//Debugger Code:
 	switch(OpCode){
 		case(add): printf("Executing add...\n"); break;
@@ -121,11 +121,11 @@ uint32_t ass_data_process(char *inst[], table_t *table){
 		case(teq): printf("Executing teq...\n"); break;
 		case(cmp): printf("Executing cmp...\n"); break;
 	}
-	*/
+*/
 
 	switch(OpCode){
 		//instructions that compute results:
-		case(add): res = res | ass_computeRes(add,inst); break;
+		case(Add): res = res | ass_computeRes(Add,inst); break;
 		case(sub): res = res | ass_computeRes(sub,inst); break;
 		case(rsb): res = res | ass_computeRes(rsb,inst); break;
 		case(and): res = res | ass_computeRes(and,inst); break;
