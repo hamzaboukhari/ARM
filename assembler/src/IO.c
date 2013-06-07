@@ -201,7 +201,7 @@ char ***fileTokeniser(char** resultFromFile, int numLines, table_t *table){
 	  }
 	  result[i][j+1] = entry2[j];
   }
-  printArray(result[i]);
+  //printArray(result[i]);
   //printf("Finished Tokenising Args...\n");
 
   if(getType(table, result[i][0]) == 3) {

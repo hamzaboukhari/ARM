@@ -58,6 +58,13 @@ void assembleInstructions(char*** resultArray, int len, table_t *table, assemble
 
 }
 
+void printAllArrays(char*** array, int len){
+	for(int i = 0; i<len; i++){
+		printf("Instruction[%i]:\n",i);
+		printArray(array[i]);
+	}
+}
+
 int main(int argv, char** args){
 
  char *fileName = args[1];
@@ -70,30 +77,18 @@ int main(int argv, char** args){
 
  //Converting into a 2D string array
  char ***finalArr = fileTokeniser(resultFromFile,numLines,&table);
- printf("\nFA[0]:\n");printArray(finalArr[0]);
- printf("\nFA[1]:\n");printArray(finalArr[1]);
- printf("\nFA[2]:\n");printArray(finalArr[2]);
- printf("\nFA[3]:\n");printArray(finalArr[3]);
- printf("\nFA[4]:\n");printArray(finalArr[4]);
- printf("\nFA[5]:\n");printArray(finalArr[5]);
 
  //Removing Labels
  char ***instructionArray = getInstructions(finalArr,numLines,&table);
- printf("\niA[0]:\n");printArray(instructionArray[0]);
- printf("\niA[1]:\n");printArray(instructionArray[1]);
- printf("\niA[2]:\n");printArray(instructionArray[2]);
- printf("\niA[3]:\n");printArray(instructionArray[3]);
- printf("\niA[4]:\n");printArray(instructionArray[4]);
- printf("\niA[5]:\n");printArray(instructionArray[5]);
-
  numLines = numLines - numOfLoops(finalArr,numLines,&table);
+ printAllArrays(instructionArray,numLines);
 
  assembler assembledInstructions;
  assembledInstructions = initASM();
  //printf("Executing instructions...\n");
  assembleInstructions(instructionArray,numLines,&table, &assembledInstructions);
 
- //printf("Printing Instructions...\n");
+ printf("Assembled Instructions:\n");
  printAllBits(&assembledInstructions,numLines);
 
  //printf("Counter: %d\n", assembledInstructions.counter);
