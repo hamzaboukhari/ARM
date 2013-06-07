@@ -78,20 +78,23 @@ uint32_t ass_data_process(char *inst[], table_t *table){
 	printf("Value: %i\n",OpCode);
 	uint32_t res = 14 << 28; //set Cond to 1110 (al)
 
+	/*
+	//Debugger Code:
 	switch(OpCode){
-		case(add): printf("Executing and...\n"); break;
-		case(sub): printf("Executing and...\n"); break;
-		case(rsb): printf("Executing and...\n"); break;
+		case(add): printf("Executing add...\n"); break;
+		case(sub): printf("Executing sub...\n"); break;
+		case(rsb): printf("Executing rsb...\n"); break;
 		case(and): printf("Executing and...\n"); break;
-		case(eor): printf("Executing and...\n"); break;
-		case(orr): printf("Executing and...\n"); break;
+		case(eor): printf("Executing eor...\n"); break;
+		case(orr): printf("Executing orr...\n"); break;
 
 		case(mov): printf("Executing mov...\n"); break;
 
-		case(tst): printf("Executing and...\n"); break;
-		case(teq): printf("Executing and...\n"); break;
-		case(cmp): printf("Executing and...\n"); break;
+		case(tst): printf("Executing tst...\n"); break;
+		case(teq): printf("Executing teq...\n"); break;
+		case(cmp): printf("Executing cmp...\n"); break;
 	}
+	*/
 
 	switch(OpCode){
 		case(add): res = res | ass_computeRes(add,inst); break;
