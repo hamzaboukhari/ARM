@@ -27,14 +27,15 @@ uint32_t calcOp2(char *op2){
 		//Is a constant
 		//printf("%s is a constant: %i\n",op2, getConst(op2));
 		uint32_t op2Val = getConst(op2);
-		int rotate;
+		int rotate = 0;
 		for(int i=0;bitCheck(op2Val,0)==0;i++){
 			rotate++;
 			op2Val >>= 1;
 			//printBits(op2Val);
 		}
-		uint32_t rot = rotate << 8;
+		uint32_t rot = rotate << 7;
 		return rot | op2Val;
+		//return op2Val;
 	}else{
 		//Is a register
 		return getConst(op2);
@@ -73,6 +74,7 @@ uint32_t ass_mov(char *inst[]){
 	//printf("MOV:");
 	uint32_t OpCode = mov << 21;
 	uint32_t Rd = getConst(inst[1]) << 12;
+	printf("RD: %s = %i \n",inst[1], Rd >> 12);
 	uint32_t Op2 = calcOp2(inst[2]);
 	int I = evalI(inst[2]);
 

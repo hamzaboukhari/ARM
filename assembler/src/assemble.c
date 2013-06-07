@@ -94,7 +94,7 @@ int main(int argv, char** args){
  //Removing Labels
  char ***instructionArray = getInstructions(finalArr,numLines,&table);
  numLines = numLines - numOfLoops(finalArr,numLines,&table);
- //printAllArrays(instructionArray,numLines);
+ printAllArrays(instructionArray,numLines);
 
  assembler assembledInstructions;
  assembledInstructions = initASM();
