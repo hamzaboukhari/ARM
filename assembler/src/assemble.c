@@ -60,7 +60,6 @@ void assembleInstructions(char*** resultArray, int len, table_t *table, assemble
 
 	output->Instructions[len] = 0x01;
 
-
 }
 
 void printAllArrays(char*** array, int len){
@@ -79,7 +78,7 @@ int main(int argv, char** args){
  Output[size-1] = NULL;
  Output[size-2] = NULL;
  strcpy(Input_2,Output);
- strcat(Output,"_test");
+ strcat(Output,".bin");
  //printf("Output: %s\n",Output);
  int numLines = numOfLines(fileName);
  //printf("Executing instructions...\n");
