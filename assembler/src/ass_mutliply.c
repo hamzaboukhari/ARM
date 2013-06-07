@@ -14,35 +14,30 @@
 
 uint32_t ass_multiply(char *inst[], table_t *table) {
 
-	uint32_t RD = getConst(inst[1]) << 16;
-	uint32_t RM = getConst(inst[2]);
-	uint32_t RS = getConst(inst[3]) << 8;
+	uint32_t RD = getConst(inst[1]) << 16; //Register Rd address
+	uint32_t RM = getConst(inst[2]); //Register Rm address
+	uint32_t RS = getConst(inst[3]) << 8; //Register Rs address
 
 	uint32_t bin = 0x0;
-	bin = setBits(bin, 29, 31, 1);
-	bin = setBits(bin, 22, 28, 0);
-	bin = setBit(bin, 20, 0);
-	bin = setBit(bin, 7, 1);
-	bin = setBits(bin, 5, 6, 0);
-	bin = setBit(bin, 4, 1);
+	bin = setBits(bin, 29, 31, 1); //Bits 31 to 29 of Cond
+	bin = setBits(bin, 22, 28, 0); //Bits 22 to 27 and bit 28 of Cond
+	bin = setBit(bin, 20, 0); //S bit
+	bin = setBit(bin, 7, 1); //Bit 7
+	bin = setBits(bin, 5, 6, 0); //Bit 5 and 6
+	bin = setBit(bin, 4, 1); //Bit 4
 
 	if (!strcmp(inst[0], "mul")) {
 		printf("detected mul \n");
-		bin = setBit(bin, 21, 0);
+		bin = setBit(bin, 21, 0); //Set A to 0
 		return bin | RD | RM | RS;
 	} else if (!strcmp(inst[0], "mla")) {
 		printf("detected mla \n");
-		bin = setBit(bin, 21, 1);
-		int RN = getConst(inst[4]) << 12;
+		bin = setBit(bin, 21, 1); //Set A to 1
+		int RN = getConst(inst[4]) << 12; //Register Rn address
 		return bin | RD | RM | RS | RN;
 	} else {
-		perror("Not multiply");
+		perror("Not multiply instruction");
 		exit(EXIT_FAILURE);
 	}
 
-
-
- /* int res = getConst(inst[1]);
-  printf("Mult test: %d \n",res); */
-    return NULL;
 }

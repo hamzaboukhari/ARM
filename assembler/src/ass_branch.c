@@ -12,10 +12,14 @@
 #include "utils.h"
 #include "LinkedList.h";
 
+enum {
+	PC_OFFSET = 8
+};
+
 uint32_t calcOffset(char *c) {
-	uint32_t offset = - 8 - atoi(c);
-	offset >>= 2;
-	offset = setBits(offset, 24, 31, 0);
+	uint32_t offset = - PC_OFFSET - atoi(c); //Offset between current address and label, taking into account 8 byte PC offset
+	offset >>= 2; //Offset shifted right two bits
+	offset = setBits(offset, 24, 31, 0); //Offset extended to 32 bits
 	return offset;
 }
 
@@ -23,12 +27,11 @@ uint32_t calcOffset(char *c) {
 
 uint32_t ass_branch(char *inst[], table_t *table) {
 	uint32_t bin = 0x0;
-	uint32_t binCond = getValue(table,inst[0]) << 28;
+	uint32_t binCond = getValue(table,inst[0]) << 28; //Cond is bits 31 to 28 so it is shifted 28
 	uint32_t offset = calcOffset(inst[2]);
-	bin = setBit(bin, 27, 1);
-	bin = setBit(bin, 26, 0);
-	bin = setBit(bin, 25, 1);
-	bin = setBit(bin, 24, 0);
-
+	bin = setBit(bin, 27, 1); //Bits 27, 26, 25 set to 101
+	bin = setBit(bin, 26, 0); //Bits 27, 26, 25 set to 101
+	bin = setBit(bin, 25, 1); //Bits 27, 26, 25 set to 101
+	bin = setBit(bin, 24, 0); //Bit 24 set to 0
 	return bin | binCond | offset;
 }

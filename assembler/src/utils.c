@@ -90,6 +90,13 @@ void printBits(uint32_t x){
  printf("\n");
 }
 
+void printAllBits(assembler *output, int len){
+	for(int i = 0; i<len; i++){
+		printBits(output->Instructions[i]);
+	}
+}
+
+
 void printHex(uint32_t x){
  printf("0x%x \n",x);
 }

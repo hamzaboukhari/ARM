@@ -20,8 +20,9 @@ void rstrip(char *string)
   if (!string)
     return;
   l = strlen(string) - 1;
-  while (isspace(string[l]) && l >= 0)
+  while (isspace(string[l]) && l >= 0) {
     string[l--] = 0;
+  }
 }
 
 void lstrip(char *string)
@@ -100,6 +101,19 @@ int numOfLines(char* input){
 	fclose(temp);
 
 	return numLines;
+}
+
+int numOfLoops(char*** resultArray, int len, table_t *table){
+
+	int j = 0;
+	for(int i=0; i<len ;i++){
+		//printf("resultArr[%i]: %s\n",i, resultArray[i][0]);
+		if(getType(table, resultArray[i][0]) == Label){
+			j++;
+		}
+	}
+
+	return j;
 }
 
 char **readFromFile(char* input){

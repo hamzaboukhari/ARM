@@ -5,19 +5,6 @@
 #include "utils.h"
 #include "LinkedList.h"
 
-int numOfLoops(char*** resultArray, int len, table_t *table){
-
-	int j = 0;
-	for(int i=0; i<len ;i++){
-		//printf("resultArr[%i]: %s\n",i, resultArray[i][0]);
-		if(getType(table, resultArray[i][0]) == Label){
-			j++;
-		}
-	}
-
-	return j;
-}
-
 char ***getInstructions(char*** resultArray, int len, table_t *table){
 
 	char ***result = (char ***)malloc(len * sizeof(char**));
@@ -67,12 +54,6 @@ void assembleInstructions(char*** resultArray, int len, table_t *table, assemble
 		}
 	}
 
-}
-
-void printAllBits(assembler *output, int len){
-	for(int i = 0; i<len; i++){
-		printBits(output->Instructions[i]);
-	}
 }
 
 int main(int argv, char** args){
