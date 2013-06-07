@@ -56,6 +56,8 @@ void assembleInstructions(char*** resultArray, int len, table_t *table, assemble
 		output->counter++;
 	}
 
+	//finishedExecution(output);
+
 	output->Instructions[len] = 0x01;
 
 
@@ -72,11 +74,13 @@ int main(int argv, char** args){
  int size =strlen(args[1]);
  char *fileName = args[1];
  char Output[strlen(args[1])];
+ char Input_2[strlen(args[1])];
  strcpy(Output, args[1]);
  Output[size-1] = NULL;
  Output[size-2] = NULL;
+ strcpy(Input_2,Output);
  strcat(Output,"_test");
- printf("Output: %s\n",Output);
+ //printf("Output: %s\n",Output);
  int numLines = numOfLines(fileName);
  //printf("Executing instructions...\n");
  table_t table;
@@ -90,18 +94,22 @@ int main(int argv, char** args){
  //Removing Labels
  char ***instructionArray = getInstructions(finalArr,numLines,&table);
  numLines = numLines - numOfLoops(finalArr,numLines,&table);
- printAllArrays(instructionArray,numLines);
+ //printAllArrays(instructionArray,numLines);
 
  assembler assembledInstructions;
  assembledInstructions = initASM();
  //printf("Executing instructions...\n");
  assembleInstructions(instructionArray,numLines,&table, &assembledInstructions);
 
- //printf("Assembled Instructions:\n");
+ printf("Assembled Instructions:\n\n");
  printAllBits(&assembledInstructions,numLines);
 
+ printf("\n");
+
+ printOriginal(Input_2);
+
  //printf("Counter: %d\n", assembledInstructions.counter);
- printf("\nFinished...\n");
+ //printf("\nFinished...\n");
  writeToBinaryFile(Output, &assembledInstructions);
 
  return 0;

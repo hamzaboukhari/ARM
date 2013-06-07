@@ -117,16 +117,14 @@ uint32_t transfer(char **arguments, assembler *instState,table_t *t){
 
 uint32_t DataTransfer(int type,char **arguments,assembler *instState,table_t *t){
  if(type == ldr){
-  printf("\nLDR instruction \n\n");
+  //printf("\nLDR instruction \n\n");
   uint32_t ldrRes = transfer(arguments,instState,t);
-  instState -> counter++;
   printf("0x%08x \n",ldrRes);
   return ldrRes;
  }else{
-  printf("\nSTR instruction \n\n");
+ // printf("\nSTR instruction \n\n");
   uint32_t strRes = transfer(arguments,instState,t);
   setBit(strRes,20,0);
-  instState -> counter++;
   printf("0x%08x \n",strRes);
   return strRes;
  }
@@ -138,7 +136,7 @@ uint32_t Dt_differentiate(char *instruction[], table_t *t,assembler *instState){
   int type = !getType(t,instruction[0]);
   uint32_t result = DataTransfer(type,(instruction+1),instState,t);
   //printf("result worked \n");
-  printBits(result);
+  //printBits(result);
   return result;
 }
 

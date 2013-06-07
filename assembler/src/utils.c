@@ -23,8 +23,22 @@ void writeToBinaryFile(char *filePath,assembler *assInstState){
    fwrite(&(assInstState->Instructions[i]),sizeof(uint32_t),1,fp);
    i++;
   }
-  printf("Writing done \n");
+  fclose(fp);
+  //printf("Writing done \n");
 
+}
+
+void printOriginal(char *loc){
+ //printf("%s \n",loc);
+ FILE *fp = fopen(loc,"rb");
+ uint32_t *bitArray = calloc(sizeof(uint32_t)*100,4);
+ int i=0;
+ while(!feof(fp)){
+  fread(&(bitArray[i]),sizeof(uint32_t)*100,1,fp);
+ }
+ for(int j=0; bitArray[j] != 0x00; j++){
+  printBits(bitArray[j]);
+ }
 }
 
 int maxLength(char **stringArray){
@@ -106,7 +120,7 @@ void printBits(uint32_t x){
 }
 
 void printAllBits(assembler *output, int len){
-	for(int i = 0; i<len+1; i++){
+	for(int i = 0; i<len; i++){
 		printBits(output->Instructions[i]);
 	}
 }
