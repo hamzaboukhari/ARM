@@ -56,6 +56,9 @@ void assembleInstructions(char*** resultArray, int len, table_t *table, assemble
 		output->counter++;
 	}
 
+	output->Instructions[len] = 0x01;
+
+
 }
 
 void printAllArrays(char*** array, int len){
@@ -68,16 +71,18 @@ void printAllArrays(char*** array, int len){
 int main(int argv, char** args){
 
  char *fileName = args[1];
+ char Output[strlen(args[1]) - 1];
+ strncpy(Output, args[1], strlen(args[1]) - 2);
  int numLines = numOfLines(fileName);
-
+ //printf("Executing instructions...\n");
  table_t table;
  init(&table);
  buildSymTable(&table);
  char **resultFromFile = readFromFile(fileName);
-
+ //printf("Executing instructions...\n");
  //Converting into a 2D string array
  char ***finalArr = fileTokeniser(resultFromFile,numLines,&table);
-
+ //printf("Executing instructions...\n");
  //Removing Labels
  char ***instructionArray = getInstructions(finalArr,numLines,&table);
  numLines = numLines - numOfLoops(finalArr,numLines,&table);
@@ -88,11 +93,12 @@ int main(int argv, char** args){
  //printf("Executing instructions...\n");
  assembleInstructions(instructionArray,numLines,&table, &assembledInstructions);
 
- printf("Assembled Instructions:\n");
+ //printf("Assembled Instructions:\n");
  printAllBits(&assembledInstructions,numLines);
 
  //printf("Counter: %d\n", assembledInstructions.counter);
  printf("\nFinished...\n");
+ writeToBinaryFile(Output, &assembledInstructions);
 
  return 0;
 }

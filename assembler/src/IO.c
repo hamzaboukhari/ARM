@@ -175,11 +175,21 @@ char ***fileTokeniser(char** resultFromFile, int numLines, table_t *table){
  for(int i=0; i<numLines; i++){
   char *inst = resultFromFile[i];
   if(checkForLabel(inst) != 0){
-	  //printf("\nFound Label!!!\n");
+	  printf("\nFound Label!!!\n");
 	  char* labelName = getLabelName(inst);
 	  result[i][0] = "Label";
 	  result[i][1] = labelName;
-	  sprintf(result[i][2], "%d",(address + 4));
+	  int j = 0;
+	  	  while (j < numLines) {
+	  		  if ((getType(table, result[j][0]) == Branch) & (!strcmp(result[j][1], result[i][1]) == 0)) {
+	  			  sprintf(result[j][2], "%d", address - atoi(result[j][2]));
+	  			  break;
+	  		  }
+	  		  j++;
+	  	  }
+	  	  if (j == numLines) {
+	  		sprintf(result[i][2], "%d",(address + 4));
+	  	  }
 	  //printf("LabelAddress: %i\n\n",address+4);
   } else {
 	address += 4;
@@ -206,10 +216,16 @@ char ***fileTokeniser(char** resultFromFile, int numLines, table_t *table){
 
   if(getType(table, result[i][0]) == 3) {
 	  //printf("found branch \n");
-	  for (int j = 0 ; j < numLines ; j++) {
+	  int j = 0;
+	  while (j < numLines) {
 		  if ((strcmp(result[j][0], "Label") == 0) & (!strcmp(result[j][1], result[i][1]) == 0)) {
-			  sprintf(result[i][2], "%d", address - atoi(result[j][2]));
+			  sprintf(result[i][2], "%d", atoi(result[j][2]) - address);
+			  break;
 		  }
+		  j++;
+	  }
+	  if (j == numLines) {
+		  sprintf(result[i][2], "%d", address);
 	  }
   }
   }
