@@ -12,6 +12,17 @@
 #include "LinkedList.h"
 
 
+void writeToBinaryFile(char *filePath,assembler assInstState){
+ FILE *fp = fopen(filePath,"w");
+ if(fp == NULL){
+  perror("Writing binary file error");
+  exit(EXIT_FAILURE);
+ }
+ for(int i=0; assInstState->Instructions[i] != 0x01; i++){
+  fwrite(fp,assInstState->Instructions[i]);
+ }
+}
+
 int maxLength(char **stringArray){
  int i=0;
  while(stringArray[i] != NULL){
