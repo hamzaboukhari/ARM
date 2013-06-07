@@ -30,28 +30,30 @@ char ***getInstructions(char*** resultArray, int len, table_t *table){
 
 
 void assembleInstructions(char*** resultArray, int len, table_t *table, assembler *output){
-	printf("Starting Executing instructions...\n");
+	//printf("Starting Executing instructions...\n");
 
 	for(int i = 0; i<len; i++){
-		printf("Executing Instruction[%i]...\n",i);
+		//printf("Executing Instruction[%i]...\n",i);
 
-		if(getType(table,resultArray[i][0]) == Data_Processing){ printf("Detected DP...\n");
+		if(getType(table,resultArray[i][0]) == Data_Processing){ //printf("Detected DP...\n");
 
 			output->Instructions[i] = ass_data_process(resultArray[i],table);
 
-		} else if(getType(table,resultArray[i][0]) == Multiply){ printf("Detected M...\n");
+		} else if(getType(table,resultArray[i][0]) == Multiply){ //printf("Detected M...\n");
 
 			output->Instructions[i] = ass_multiply(resultArray[i],table);
 
-		} else if(getType(table,resultArray[i][0]) == Data_Transfer){ printf("Detected DT...\n");
+		} else if(getType(table,resultArray[i][0]) == Data_Transfer){ //printf("Detected DT...\n");
 
 			//output->Instructions[i] = DataTransfer(1,resultArray[i],&output);
 
-		} else if(getType(table,resultArray[i][0]) == Branch){ printf("Detected B...\n");
+		} else if(getType(table,resultArray[i][0]) == Branch){ //printf("Detected B...\n");
 
 			output->Instructions[i] = ass_branch(resultArray[i],table);
 
 		}
+
+		output->counter++;
 	}
 
 }
@@ -88,13 +90,15 @@ int main(int argv, char** args){
 
  assembler assembledInstructions;
  assembledInstructions = initASM();
- printf("Executing instructions...\n");
+ //printf("Executing instructions...\n");
  assembleInstructions(instructionArray,numLines,&table, &assembledInstructions);
 
- printf("Printing Instructions...\n");
+ //printf("Printing Instructions...\n");
  printAllBits(&assembledInstructions,numLines);
 
- printf("\nFinished...");
+ //printf("Counter: %d\n", assembledInstructions.counter);
+ printf("\nFinished...\n");
+
  return 0;
 }
 

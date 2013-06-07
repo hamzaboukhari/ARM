@@ -44,7 +44,7 @@ void strip(char *string)
 
 
 void printArray(char** array){
-	printf("Printing Array:\n");
+	//printf("Printing Array:\n");
  for(int i=0;strcmp(array[i],"\0") != 0; i++){
   printf("Array[%i] %s\n",i,array[i]);
  }
@@ -73,7 +73,7 @@ char **tokeniser(char str[],char *seperator){
 
    char *modified = checkTransferInst(str);
    token = strtok(modified, seperator);
-   printf("First Token: %s\n",token);
+   //printf("First Token: %s\n",token);
    while(token != NULL)
     {
   //    printf("Token Saving: %s\n",token);
@@ -89,10 +89,10 @@ char **tokeniser(char str[],char *seperator){
 }
 
 int numOfLines(char* input){
-	printf("Executing numOfLines()...\n");
+	//printf("Executing numOfLines()...\n");
 	FILE *temp = fopen(input,"r");
 	int ch, numLines=0;
-	printf("Starting...\n");
+	//printf("Starting...\n");
 	while (ch!=EOF){
 		ch = fgetc(temp);
 		if(ch=='\n')numLines++;
@@ -128,36 +128,36 @@ char **readFromFile(char* input){
    result[j] = fgets(result[j],20,fp);
    j++;
  }
- printf("%s",result[0]);
- printf("%s",result[1]);
- printf("%s",result[2]);
+ //printf("%s",result[0]);
+ //printf("%s",result[1]);
+ //printf("%s",result[2]);
  return result;
 }
 
 char *getLabelName(char c[]) {
-	printf("Getting Label Name...\n");
+	//printf("Getting Label Name...\n");
 	int length = strlen(c);
-	printf("Length: %i \n", length);
+	//printf("Length: %i \n", length);
 	char *res;
 	for (int i = 0 ; i < (length-2) ; i++) {
 		res[i] = c[i];
 	}
-	printf("labelName: %s\n", res);
+	//printf("labelName: %s\n", res);
 	return res;
 }
 
 int checkForLabel(char c[]) {
 	//printf("s: %c \n" , c[0]);
-	printf("Checking if Label...\n");
+	//printf("Checking if Label...\n");
 	int length = strlen(c);
-	printf("Length: %i \n", length);
+	//printf("Length: %i \n", length);
 	for (int i = 0 ; i < length ; i++) {
 		if (c[i] == ':') {
-			printf("Found : \n");
+			//printf("Found : \n");
 			return 1;
 		}
 	}
-	printf("not found : \n");
+	//printf("not found : \n");
 	return 0;
 }
 
@@ -175,12 +175,12 @@ char ***fileTokeniser(char** resultFromFile, int numLines, table_t *table){
  for(int i=0; i<numLines; i++){
   char *inst = resultFromFile[i];
   if(checkForLabel(inst) != 0){
-	  printf("\nFound Label!!!\n");
+	  //printf("\nFound Label!!!\n");
 	  char* labelName = getLabelName(inst);
 	  result[i][0] = "Label";
 	  result[i][1] = labelName;
 	  sprintf(result[i][2], "%d",(address + 4));
-	  printf("LabelAddress: %i\n\n",address+4);
+	  //printf("LabelAddress: %i\n\n",address+4);
   } else {
 	address += 4;
 
@@ -188,24 +188,24 @@ char ***fileTokeniser(char** resultFromFile, int numLines, table_t *table){
 
   char **entry = tokeniser(resultFromFile[i]," ");
   result[i] = entry;
-  printf("%s ",result[i][0]);
-  printf("%s \n",result[i][1]);
+  //printf("%s ",result[i][0]);
+  //printf("%s \n",result[i][1]);
 
-  printf("Tokenising Args...\n");
+  //printf("Tokenising Args...\n");
   char **entry2 = tokeniser(result[i][1],",");
   //printArray(entry2);
-  printf("Parsing Args...\n");
+  //printf("Parsing Args...\n");
   for(int j=0;strcmp(entry2[j],"\0") != 0; j++){
 	  if(i==0){
-	  printf("J: %i \n", j );
+	  //printf("J: %i \n", j );
 	  }
 	  result[i][j+1] = entry2[j];
   }
   printArray(result[i]);
-  printf("Finished Tokenising Args...\n");
+  //printf("Finished Tokenising Args...\n");
 
   if(getType(table, result[i][0]) == 3) {
-	  printf("found branch \n");
+	  //printf("found branch \n");
 	  for (int j = 0 ; j < numLines ; j++) {
 		  if ((strcmp(result[j][0], "Label") == 0) & (!strcmp(result[j][1], result[i][1]) == 0)) {
 			  sprintf(result[i][2], "%d", address - atoi(result[j][2]));

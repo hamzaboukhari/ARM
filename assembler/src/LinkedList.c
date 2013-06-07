@@ -75,7 +75,7 @@ void insertElements(table_t *t,char keys[24][100],int values[24], int types[24])
  for(int i=0; i<24; i++){
   insertInEnd(t,keys[i],values[i],types[i]);
  }
- printf("Insertion Complete ! \n");
+ //printf("Insertion Complete ! \n");
 }
 
 int getValue(table_t *t, char *k){
@@ -96,7 +96,7 @@ int getType(table_t *t, char *k){
  while(i != t->foot){
   if(strcmp(k,i->key) == 0){
    return i->type;
-   printf("Got type \n");
+   //printf("Got type \n");
   }
   i = next(i);
  }

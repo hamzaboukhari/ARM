@@ -54,9 +54,9 @@ int isConst(char* theConstant){
 uint32_t getConst(char* theConstant){
 	int len = strlen(theConstant);
 	char constant[len-1];
-	printf("Converting theConstant[%i]...\n",len);
+	//printf("Converting theConstant[%i]...\n",len);
 	for(int i=1;i < len;i++){
-		printf("Loading Char: %c\n", theConstant[i]);
+		//printf("Loading Char: %c\n", theConstant[i]);
 		constant[i-1] = theConstant[i];
 	}
 

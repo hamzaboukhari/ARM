@@ -28,11 +28,11 @@ uint32_t ass_multiply(char *inst[], table_t *table) {
 	bin = setBit(bin, 4, 1); //Bit 4
 
 	if (!strcmp(inst[0], "mul")) {
-		printf("detected mul \n");
+		//printf("detected mul \n");
 		bin = setBit(bin, 21, 0); //Set A to 0
 		return bin | RD | RM | RS;
 	} else if (!strcmp(inst[0], "mla")) {
-		printf("detected mla \n");
+		//printf("detected mla \n");
 		bin = setBit(bin, 21, 1); //Set A to 1
 		int RN = getConst(inst[4]) << 12; //Register Rn address
 		return bin | RD | RM | RS | RN;

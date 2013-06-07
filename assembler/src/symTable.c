@@ -22,7 +22,7 @@ void buildSymTable(table_t *symTable){
 		               ,Data_Transfer,Branch,Branch,Branch,Branch,Branch,Branch,Branch
 		               ,Special,Special, Label};
  insertElements(symTable,keys,values,types);
- printList(symTable);
+ //printList(symTable);
 
 }
 
