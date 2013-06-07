@@ -31,8 +31,8 @@ char ***getInstructions(char** resultFromFile, table_t *table){
 */
 
 int main(int argv, char** args){
- /*printf("Starting...\n");
- char *fileName = "add01.s";
+ printf("Starting...\n");
+ char *fileName = args[1];
  printf("Finding NLines...\n");
  int numLines = numOfLines(fileName);
  printf("Found NLines...\n");
@@ -51,36 +51,34 @@ int main(int argv, char** args){
  printArray(finalArr[3]);
  printArray(finalArr[4]);
  printArray(finalArr[5]);
- printArray(finalArr[6]);
+ //printArray(finalArr[6]);
 
- /*
- printf("Testing Data Process...\n");
- uint32_t res = ass_data_process(finalArr[0], &table);
+
+ printf("Testing Branch...\n");
+ uint32_t res = ass_branch(finalArr[5], &table);
  printBits(res);
- */
+
 
  //char ***instructionArray = getInstructions(finalArr, &table);
 
  assembler instState;
  instState = initASM();
- char buffer[] = "r2,[r1,#3]";
+ /*char buffer[] = "r2,[r1,#3]";
  printf("You have entered: %s \n","ldr r2,[r1]");
  char **operands = tokeniser(buffer,",");
  strip(operands[0]);
  strip(operands[1]);
  printf("Operand 1: %s \n",operands[0]);
- printf("Operand 2: %s \n\n",operands[1]);
+ printf("Operand 2: %s \n",operands[1]);
 
- char *testStrip[];
- testStrip[0] = "    Pavan";
- testString[1]
- printf("%s\n",testStrip[0]);
- removeWhiteSpace(testStrip);
- printf("%s\n",testStrip[0]);
+//1110 000000 1 0 0010 0000 0010 1001 1110
+  11100000001000100000001010011110
 
+  1110 000000 0 0 0011 0000 0010 1001 0001
 
+  1110 000000 1 0 0011 0100 0010 1001 0001
  DataTransfer(0,operands,instState);
-
+*/
  printf("\nFinished...");
  return 0;
 }
