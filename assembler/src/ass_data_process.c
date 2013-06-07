@@ -28,10 +28,12 @@ uint32_t calcOp2(char *op2){
 		//printf("%s is a constant: %i\n",op2, getConst(op2));
 		uint32_t op2Val = getConst(op2);
 		int rotate = 0;
-		for(int i=0;bitCheck(op2Val,0)==0;i++){
-			rotate++;
-			op2Val >>= 1;
-			//printBits(op2Val);
+		if(op2Val > 255){
+			for(int i=0;bitCheck(op2Val,0)==0;i++){
+				rotate++;
+				op2Val >>= 1;
+				//printBits(op2Val);
+			}
 		}
 		uint32_t rot = rotate << 7;
 		return rot | op2Val;
