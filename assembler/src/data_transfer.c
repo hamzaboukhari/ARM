@@ -22,7 +22,7 @@ char *removeBrackets(char *operand){
  return res;
 }
 
-uint32_t transfer(char **arguments, assembler *instState){
+uint32_t transfer(char **arguments, assembler *instState,table_t *t){
  printf("transfer \n");
  int P_Bit;
  char *Rd = arguments[0];
@@ -41,12 +41,15 @@ uint32_t transfer(char **arguments, assembler *instState){
 
   if(val <= 0xFF){
    //mov instruction;
-   printf("mov instruction \n");
-   char *inst[10];
-   inst[0] = "mov";
+   printf("mov instruction \n\n");
+   char **inst = malloc(sizeof(char*)*3);
+   for(int i=0; i<3; i++){
+	inst[i] = malloc(sizeof(char)*20);
+   }
+   strcpy(inst[0],"mov");
    strcpy(inst[1],Rd);
    strcpy(inst[2],(address+1));
-   return ass_data_process(inst);
+   return ass_data_process(inst,t);
   }else{
    insertExpression(instState->BigVals,arguments,val,instState->counter);
    rd <<= 12;
@@ -112,19 +115,44 @@ uint32_t transfer(char **arguments, assembler *instState){
  }
 }
 
-uint32_t DataTransfer(int type,char **arguments,assembler *instState){
+uint32_t DataTransfer(int type,char **arguments,assembler *instState,table_t *t){
  if(type == ldr){
   printf("\nLDR instruction \n\n");
-  uint32_t ldrRes = transfer(arguments,instState);
+  uint32_t ldrRes = transfer(arguments,instState,t);
   instState -> counter++;
   printf("0x%08x \n",ldrRes);
   return ldrRes;
  }else{
   printf("\nSTR instruction \n\n");
-  uint32_t strRes = transfer(arguments,instState);
+  uint32_t strRes = transfer(arguments,instState,t);
   setBit(strRes,20,0);
   instState -> counter++;
   printf("0x%08x \n",strRes);
   return strRes;
  }
 }
+
+
+uint32_t Dt_differentiate(char *instruction[], table_t *t,assembler *instState){
+  ///printArray(instruction+1);
+  int type = !getType(t,instruction[0]);
+  uint32_t result = DataTransfer(type,(instruction+1),instState,t);
+  //printf("result worked \n");
+  printBits(result);
+  return result;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

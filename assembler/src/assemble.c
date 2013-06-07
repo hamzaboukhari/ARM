@@ -45,7 +45,7 @@ void assembleInstructions(char*** resultArray, int len, table_t *table, assemble
 
 		} else if(getType(table,resultArray[i][0]) == Data_Transfer){ //printf("Detected DT...\n");
 
-			//output->Instructions[i] = DataTransfer(1,resultArray[i],&output);
+			output->Instructions[i] = Dt_differentiate(resultArray[i],table,output);
 
 		} else if(getType(table,resultArray[i][0]) == Branch){ //printf("Detected B...\n");
 
