@@ -109,7 +109,7 @@ int main(int argv, char** args){
 
  //printf("Counter: %d\n", assembledInstructions.counter);
  //printf("\nFinished...\n");
- writeToBinaryFile(Output, &assembledInstructions);
+ writeToBinaryFile(args[2], &assembledInstructions);
 
  return 0;
 }
