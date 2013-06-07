@@ -19,8 +19,9 @@ uint32_t ass_multiply(char *inst[], table_t *table) {
 	uint32_t RS = getConst(inst[3]) << 8; //Register Rs address
 
 	uint32_t bin = 0x0;
-	bin = setBits(bin, 29, 31, 1); //Bits 31 to 29 of Cond
-	bin = setBits(bin, 22, 28, 0); //Bits 22 to 27 and bit 28 of Cond
+	bin = 14 << 28; //set Cond to 1110
+	//bin = setBits(bin, 29, 31, 1); //Bits 31 to 29 of Cond
+	bin = setBits(bin, 22, 27, 0); //Bits 22 to 27
 	bin = setBit(bin, 20, 0); //S bit
 	bin = setBit(bin, 7, 1); //Bit 7
 	bin = setBits(bin, 5, 6, 0); //Bit 5 and 6

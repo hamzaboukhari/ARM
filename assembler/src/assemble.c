@@ -58,7 +58,7 @@ void assembleInstructions(char*** resultArray, int len, table_t *table, assemble
 
 int main(int argv, char** args){
 
- char *fileName = "add01.s";
+ char *fileName = args[1];
  int numLines = numOfLines(fileName);
 
  table_t table;
