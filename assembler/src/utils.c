@@ -19,7 +19,7 @@ void writeToBinaryFile(char *filePath,assembler *assInstState){
   exit(EXIT_FAILURE);
  }
   int i=0;
-  while(assInstState->Instructions[i] != 0x01){
+  while(assInstState->Instructions[i] != 0x0){
    fwrite(&(assInstState->Instructions[i]),sizeof(uint32_t),1,fp);
    i++;
   }
@@ -59,19 +59,26 @@ int getMaxIndex(uint32_t *arr){
 }
 
 void finishedExecution(assembler *instState){
- int i=1;
+ printf("ended ex \n");
+ int i=0;
  int last_poss = getMaxIndex(instState->BigVals);
+ printf("Max Index: %d \n",last_poss);
  iterator it = start(instState->BigVals);
  iterator foot = end(instState->BigVals);
+
  while(it != foot){
   int inc = last_poss+i;
   uint32_t offset = (inc - it->type);
   offset = offset & 0x000000FF;
-  instState->Instructions[inc] = it->value;
+  offset = offset * 4;
+  printf("offset: 0x%08x \n",offset);
+  printf("Val: 0x%08x\n\n",it->value);
+  //instState->Instructions[inc] = it->value; //TODO: CHECK;
   uint32_t transfer_inst = instState->Instructions[it->type];
   transfer_inst = transfer_inst ^ offset;
   instState->Instructions[it->type] = transfer_inst;
   it = next(it);
+  i++;
  }
 }
 
@@ -112,6 +119,7 @@ assembler initASM(void){
  assembler instState = {.counter = 0};
  instState.Instructions = calloc(sizeof(uint32_t) * 1000,4);
  instState.BigVals = malloc(sizeof(table_t));
+ initLinkedList(instState.BigVals);
  return instState;
 }
 
@@ -125,7 +133,7 @@ void printBits(uint32_t x){
 }
 
 void printAllBits(assembler *output, int len){
-	for(int i = 0; i<len; i++){
+	for(int i = 0; i<len && output->Instructions[i] != 0x0; i++){
 		printBits(output->Instructions[i]);
 	}
 }

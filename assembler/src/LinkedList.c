@@ -19,7 +19,7 @@ void freeElem(node_t *elem){
  free(elem); 
 }
 
-void init(table_t *t){
+void initLinkedList(table_t *t){
  t -> head = allocElem();
  t -> foot = allocElem();
  t -> head -> prev = NULL;
@@ -67,6 +67,9 @@ void insertInEnd(table_t *t, char *k, int v,int type){
 }
 
 void insertExpression(table_t *t,char *k ,int val,int loc){
+ //printf("Inst: %s",k);
+ //printf("val: 0x%08x\n",val);
+ //printf("loc: %d\n\n",loc);
  insert(t,end(t),k,val,loc);
 }
 

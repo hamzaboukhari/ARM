@@ -56,9 +56,7 @@ void assembleInstructions(char*** resultArray, int len, table_t *table, assemble
 		output->counter++;
 	}
 
-	//finishedExecution(output);
-
-	output->Instructions[len] = 0x01;
+	finishedExecution(output);
 
 }
 
@@ -83,7 +81,7 @@ int main(int argv, char** args){
  int numLines = numOfLines(fileName);
  //printf("Executing instructions...\n");
  table_t table;
- init(&table);
+ initLinkedList(&table);
  buildSymTable(&table);
  char **resultFromFile = readFromFile(fileName);
  //printf("Executing instructions...\n");
@@ -110,6 +108,9 @@ int main(int argv, char** args){
  //printf("Counter: %d\n", assembledInstructions.counter);
  //printf("\nFinished...\n");
  writeToBinaryFile(args[2], &assembledInstructions);
+ printf("\n");
+
+// printList(assembledInstructions.BigVals);
 
  return 0;
 }

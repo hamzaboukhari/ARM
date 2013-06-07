@@ -49,16 +49,24 @@ uint32_t transfer(char **arguments, assembler *instState,table_t *t){
    strcpy(inst[0],"mov");
    strcpy(inst[1],Rd);
    strcpy(inst[2],(address+1));
+
+   printf("inst1:%s\n",inst[0]);
+   printf("inst2:%s\n",inst[1]);
+   printf("inst3:%s\n\n",inst[2]);
+
    return ass_data_process(inst,t);
   }else{
-   insertExpression(instState->BigVals,arguments,val,instState->counter);
+   printf("big ldr instruction \n\n");
+   strip(arguments[1]);
+   insertExpression(instState->BigVals,arguments[1],val,instState->counter);
    rd <<= 12;
-   uint32_t val_mask = 0x73CFC000;
+   uint32_t val_mask = 0xE59F0000;
    return val_mask ^ rd;
-   //1110 01 1 1 1 00 1 11111 00 000000000000;
+   //1110 01 0 1 1 00 1 1111 0000 000000000000;
   }
  }
  char **splitAddress = tokeniser(address,",");
+
  if(address[0] == '[' && address[4] != ']' && address[3] != ']'){
   //PRE instruction;
   printf("pre 1 \n");
@@ -86,7 +94,7 @@ uint32_t transfer(char **arguments, assembler *instState,table_t *t){
   P_Bit = 1;
   char *Rn = removeBrackets(splitAddress[0]);
   uint32_t rn = getConst(Rn);
-  uint32_t transfer_mask2 = 0xE7900000;
+  uint32_t transfer_mask2 = 0xE5900000;
   //printBits(transfer_mask2);
   //printBits(rn);
   //printBits(rd);
@@ -94,7 +102,7 @@ uint32_t transfer(char **arguments, assembler *instState,table_t *t){
   rn <<= 16;
   rd <<= 12;
   return transfer_mask2 ^ rn ^ rd;
-  //1110 01 1 1 1 00 1 0001 0010 000000000000
+  //1110 01 0 1 1 00 1 0000 0000 000000000000
 
  }else{
   printf("post 3\n");
