@@ -19,15 +19,19 @@ uint32_t ass_computeRes(int cmd, char *inst[]){
 	char *Op2 = inst[3];
 	uint32_t Op2Val;
 
+	int I;
+
 	if(isConst(Op2)){
 		Op2Val = getConst(Op2);
+		I = 1;
 	}else{
-		//OPTIONAL: is a register
+		Op2Val = getConst(Op2);
+		I = 0;
 	}
 
 	uint32_t instruction = OpCode | Rd | Rn | Op2Val;
 
-	instruction = setBit(instruction,25,1); //set I to 1
+	instruction = setBit(instruction,25,I); //set I
 
 	return instruction;
 }
@@ -38,16 +42,20 @@ uint32_t ass_computeNoRes(int cmd, char *inst[]){
 	char *Op2 = inst[2];
 	uint32_t Op2Val;
 
+	int I;
+
 	if(isConst(Op2)){
 		Op2Val = getConst(Op2);
+		I = 1;
 	}else{
-		//OPTIONAL: is a register
+		Op2Val = getConst(Op2);
+		I = 0;
 	}
 
 	uint32_t instruction = OpCode | Rn | Op2Val;
 
-	instruction = setBit(instruction,25,1); //set I to 1
-	instruction = setBit(instruction,20,1); //set S to 1
+	//instruction = setBit(instruction,25,1); //set I to 1
+	instruction = setBit(instruction,20,I); //set S to 1
 
 	return instruction;
 }
@@ -58,15 +66,19 @@ uint32_t ass_mov(char *inst[]){
 	char *Op2 = inst[2];
 	uint32_t Op2Val;
 
+	int I;
+
 	if(isConst(Op2)){
 		Op2Val = getConst(Op2);
+		I = 1;
 	}else{
-		//OPTIONAL: is a register
+		Op2Val = getConst(Op2);
+		I = 0;
 	}
 
 	uint32_t instruction = OpCode | Rd | Op2Val;
 
-	instruction = setBit(instruction,25,1); //set I to 1
+	instruction = setBit(instruction,25,I); //set I to 1
 
 	return instruction;
 }
