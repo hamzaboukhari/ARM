@@ -39,7 +39,11 @@ orr = 12,
 mov = 13,
 tst = 8,
 teq = 9,
-cmp = 10
+cmp = 10,
+
+//integer are simply unique values
+lsl = 14,
+andeq = 15
 };
 
 enum MCommands {
@@ -63,11 +67,6 @@ blt = 11,
 bgt = 12,
 ble = 13,
 b = 14
-};
-
-enum SpecialCommands {
-lsl,
-andeq
 };
 
 enum type {
