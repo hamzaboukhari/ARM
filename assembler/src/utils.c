@@ -82,7 +82,7 @@ int isConst(char* theConstant){
 
 uint32_t getConst(char* theConstant){
 	int len = strlen(theConstant);
-	//printf("Converting theConstant[%i]...\n",len);
+	//printf("Converting theConstant[%i]: %s\n",len,theConstant);
 	if(theConstant[len-1] == '\n'){
 		len--;
 	}
