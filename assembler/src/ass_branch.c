@@ -17,7 +17,7 @@ enum {
 };
 
 uint32_t calcOffset(char *c) {
-	uint32_t offset = - PC_OFFSET - atoi(c); //Offset between current address and label, taking into account 8 byte PC offset
+	uint32_t offset = atoi(c) - PC_OFFSET; //Offset between current address and label, taking into account 8 byte PC offset
 	offset >>= 2; //Offset shifted right two bits
 	offset = setBits(offset, 24, 31, 0); //Offset extended to 32 bits
 	return offset;

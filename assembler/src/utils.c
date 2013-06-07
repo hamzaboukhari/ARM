@@ -18,9 +18,12 @@ void writeToBinaryFile(char *filePath,assembler *assInstState){
   perror("Writing binary file error");
   exit(EXIT_FAILURE);
  }
- for(int i=0; (assInstState->Instructions[i]) != 0x01; i++){
-  fwrite(&(assInstState->Instructions[i]),sizeof(uint32_t),1,fp);
- }
+  int i=0;
+  while(assInstState->Instructions[i] != 0x01){
+   fwrite(&(assInstState->Instructions[i]),sizeof(uint32_t),1,fp);
+   i++;
+  }
+
 }
 
 int maxLength(char **stringArray){
@@ -102,7 +105,7 @@ void printBits(uint32_t x){
 }
 
 void printAllBits(assembler *output, int len){
-	for(int i = 0; i<len; i++){
+	for(int i = 0; i<len+1; i++){
 		printBits(output->Instructions[i]);
 	}
 }
