@@ -12,24 +12,43 @@
 #include "utils.h"
 #include "LinkedList.h"
 
+uint32_t evalI(char *op2){
+
+	if(isConst(op2)){
+		return 1;
+	}else{
+		return 0;
+	}
+}
+
+uint32_t calcOp2(char *op2){
+
+	if(isConst(op2)){
+		//Is a constant
+		//printf("%s is a constant: %i\n",op2, getConst(op2));
+		uint32_t op2Val = getConst(op2);
+		int rotate;
+		for(int i=0;bitCheck(op2Val,0)==0;i++){
+			rotate++;
+			op2Val >>= 1;
+			//printBits(op2Val);
+		}
+		uint32_t rot = rotate << 8;
+		return rot | op2Val;
+	}else{
+		//Is a register
+		return getConst(op2);
+	}
+}
+
 uint32_t ass_computeRes(int cmd, char *inst[]){
 	uint32_t OpCode = cmd << 21;
 	uint32_t Rd = getConst(inst[1]) << 12;
 	uint32_t Rn = getConst(inst[2]) << 16;
-	char *Op2 = inst[3];
-	uint32_t Op2Val;
+	uint32_t Op2 = calcOp2(inst[3]);
+	int I = evalI(inst[3]);
 
-	int I;
-
-	if(isConst(Op2)){
-		Op2Val = getConst(Op2);
-		I = 1;
-	}else{
-		Op2Val = getConst(Op2);
-		I = 0;
-	}
-
-	uint32_t instruction = OpCode | Rd | Rn | Op2Val;
+	uint32_t instruction = OpCode | Rd | Rn | Op2;
 
 	instruction = setBit(instruction,25,I); //set I
 
@@ -39,25 +58,10 @@ uint32_t ass_computeRes(int cmd, char *inst[]){
 uint32_t ass_computeNoRes(int cmd, char *inst[]){
 	uint32_t OpCode = cmd << 21;
 	uint32_t Rn = getConst(inst[1]) << 16;
-	char *Op2 = inst[2];
-	uint32_t Op2Val;
+	uint32_t Op2 = calcOp2(inst[2]);
+	int I = evalI(inst[2]);
 
-	int I;
-
-	if(isConst(Op2)){
-		//printf("Is A Constant: %s\n",Op2);
-		//printf("val: %i\n",getConst(Op2));
-		Op2Val = getConst(Op2);
-		printBits(Op2Val);
-		//printf("Is A Constant\n");
-		I = 1;
-	}else{
-		//printf("Is A Reg\n");
-		Op2Val = getConst(Op2);
-		I = 0;
-	}
-
-	uint32_t instruction = OpCode | Rn | Op2Val;
+	uint32_t instruction = OpCode | Rn | Op2;
 
 	instruction = setBit(instruction,25,1); //set I to 1
 	instruction = setBit(instruction,20,1); //set S to 1
@@ -66,22 +70,13 @@ uint32_t ass_computeNoRes(int cmd, char *inst[]){
 }
 
 uint32_t ass_mov(char *inst[]){
+	//printf("MOV:");
 	uint32_t OpCode = mov << 21;
 	uint32_t Rd = getConst(inst[1]) << 12;
-	char *Op2 = inst[2];
-	uint32_t Op2Val;
+	uint32_t Op2 = calcOp2(inst[2]);
+	int I = evalI(inst[2]);
 
-	int I;
-
-	if(isConst(Op2)){
-		Op2Val = getConst(Op2);
-		I = 1;
-	}else{
-		Op2Val = getConst(Op2);
-		I = 0;
-	}
-
-	uint32_t instruction = OpCode | Rd | Op2Val;
+	uint32_t instruction = OpCode | Rd | Op2;
 
 	instruction = setBit(instruction,25,I); //set I to 1
 
