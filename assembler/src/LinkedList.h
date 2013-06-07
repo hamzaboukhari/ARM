@@ -70,10 +70,6 @@ lsl,
 andeq
 };
 
-enum VoidCommands {
-label
-};
-
 enum type {
 	Data_Processing = 0,
 	Multiply = 1,

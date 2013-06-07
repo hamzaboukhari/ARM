@@ -5,10 +5,22 @@
 #include "utils.h"
 #include "LinkedList.h"
 
-/*
-char ***getInstructions(char** resultFromFile, table_t *table){
+int numOfLoops(char*** resultArray, int len, table_t *table){
 
-	char ***result = (char ***)malloc(100 * sizeof(char**));
+	int j = 0;
+	for(int i=0; i<len ;i++){
+		//printf("resultArr[%i]: %s\n",i, resultArray[i][0]);
+		if(getType(table, resultArray[i][0]) == Label){
+			j++;
+		}
+	}
+
+	return j;
+}
+
+char ***getInstructions(char*** resultArray, int len, table_t *table){
+
+	char ***result = (char ***)malloc(len * sizeof(char**));
 	 //allocates dynamic memory for the 3D array result;
 	 for(int i=0; i<100; i++){
 	  result[i] = (char **)malloc(100 * sizeof(char *));
@@ -17,69 +29,90 @@ char ***getInstructions(char** resultFromFile, table_t *table){
 	  }
 	 }
 
-	int len = strlen(resultFromFile);
-
 	int j = 0;
-	for(int i=1;i < len;i++){
-		if(getType(table, resultFromFile[0]) != Label){
+	for(int i=0; i<len ;i++){
+		//printf("resultArr[%i]: %s\n",i, resultArray[i][0]);
+		if(getType(table, resultArray[i][0]) != Label){
+			result[j] = resultArray[i];
 			j++;
 		}
 	}
 
-	return
+	return result;
 }
-*/
+
+
+void assembleInstructions(char*** resultArray, int len, table_t *table, assembler *output){
+	printf("Starting Executing instructions...\n");
+
+	for(int i = 0; i<len; i++){
+		printf("Executing Instruction[%i]...\n",i);
+
+		if(getType(table,resultArray[i][0]) == Data_Processing){ printf("Detected DP...\n");
+
+			output->Instructions[i] = ass_data_process(resultArray[i],table);
+
+		} else if(getType(table,resultArray[i][0]) == Multiply){ printf("Detected M...\n");
+
+			output->Instructions[i] = ass_multiply(resultArray[i],table);
+
+		} else if(getType(table,resultArray[i][0]) == Data_Transfer){ printf("Detected DT...\n");
+
+			//output->Instructions[i] = DataTransfer(1,resultArray[i],&output);
+
+		} else if(getType(table,resultArray[i][0]) == Branch){ printf("Detected B...\n");
+
+			output->Instructions[i] = ass_branch(resultArray[i],table);
+
+		}
+	}
+
+}
+
+void printAllBits(assembler *output, int len){
+	for(int i = 0; i<len; i++){
+		printBits(output->Instructions[i]);
+	}
+}
 
 int main(int argv, char** args){
- printf("Starting...\n");
- char *fileName = args[1];
- printf("Finding NLines...\n");
+
+ char *fileName = "add01.s";
  int numLines = numOfLines(fileName);
- printf("Found NLines...\n");
+
  table_t table;
  init(&table);
  buildSymTable(&table);
  char **resultFromFile = readFromFile(fileName);
- printf("\nConverting into a 2D string array... \n");
- //printList(table);
- //printf("%d \n",getType(&table,"mov"));
 
- char ***finalArr = fileTokeniser(resultFromFile,numLines, &table);
- printArray(finalArr[0]);
+ //Converting into a 2D string array
+ char ***finalArr = fileTokeniser(resultFromFile,numLines,&table);
+ printf("\nFA[0]:\n");printArray(finalArr[0]);
+ printf("\nFA[1]:\n");printArray(finalArr[1]);
+ printf("\nFA[2]:\n");printArray(finalArr[2]);
+ printf("\nFA[3]:\n");printArray(finalArr[3]);
+ printf("\nFA[4]:\n");printArray(finalArr[4]);
+ printf("\nFA[5]:\n");printArray(finalArr[5]);
 
- printArray(finalArr[1]);
- printArray(finalArr[2]);
- printArray(finalArr[3]);
- printArray(finalArr[4]);
- printArray(finalArr[5]);
- //printArray(finalArr[6]);
+ //Removing Labels
+ char ***instructionArray = getInstructions(finalArr,numLines,&table);
+ printf("\niA[0]:\n");printArray(instructionArray[0]);
+ printf("\niA[1]:\n");printArray(instructionArray[1]);
+ printf("\niA[2]:\n");printArray(instructionArray[2]);
+ printf("\niA[3]:\n");printArray(instructionArray[3]);
+ printf("\niA[4]:\n");printArray(instructionArray[4]);
+ printf("\niA[5]:\n");printArray(instructionArray[5]);
 
+ numLines = numLines - numOfLoops(finalArr,numLines,&table);
 
- printf("Testing Branch...\n");
- uint32_t res = ass_branch(finalArr[5], &table);
- printBits(res);
+ assembler assembledInstructions;
+ assembledInstructions = initASM();
+ printf("Executing instructions...\n");
+ assembleInstructions(instructionArray,numLines,&table, &assembledInstructions);
 
+ printf("Printing Instructions...\n");
+ printAllBits(&assembledInstructions,numLines);
 
- //char ***instructionArray = getInstructions(finalArr, &table);
-
- assembler instState;
- instState = initASM();
- /*char buffer[] = "r2,[r1,#3]";
- printf("You have entered: %s \n","ldr r2,[r1]");
- char **operands = tokeniser(buffer,",");
- strip(operands[0]);
- strip(operands[1]);
- printf("Operand 1: %s \n",operands[0]);
- printf("Operand 2: %s \n",operands[1]);
-
-//1110 000000 1 0 0010 0000 0010 1001 1110
-  11100000001000100000001010011110
-
-  1110 000000 0 0 0011 0000 0010 1001 0001
-
-  1110 000000 1 0 0011 0100 0010 1001 0001
- DataTransfer(0,operands,instState);
-*/
  printf("\nFinished...");
  return 0;
 }
