@@ -54,8 +54,8 @@ uint32_t ass_computeNoRes(int cmd, char *inst[]){
 
 	uint32_t instruction = OpCode | Rn | Op2Val;
 
-	//instruction = setBit(instruction,25,1); //set I to 1
-	instruction = setBit(instruction,20,I); //set S to 1
+	instruction = setBit(instruction,25,1); //set I to 1
+	instruction = setBit(instruction,20,1); //set S to 1
 
 	return instruction;
 }
