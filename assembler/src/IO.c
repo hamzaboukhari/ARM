@@ -190,11 +190,9 @@ char ***fileTokeniser(char** resultFromFile, int numLines, table_t *table){
 	  	  if (j == numLines) {
 	  		sprintf(result[i][2], "%d",(address + 4));
 	  	  }
-	  //printf("LabelAddress: %i\n\n",address+4);
+	  printf("LabelAddress: %i\n\n",address+4);
   } else {
 	address += 4;
-
-
 
   char **entry = tokeniser(resultFromFile[i]," ");
   result[i] = entry;
