@@ -82,14 +82,19 @@ int isConst(char* theConstant){
 
 uint32_t getConst(char* theConstant){
 	int len = strlen(theConstant);
-	char constant[len-1];
 	//printf("Converting theConstant[%i]...\n",len);
+	if(theConstant[len-1] == '\n'){
+		len--;
+	}
+	char constant[len-1];
 	for(int i=1;i < len;i++){
 		//printf("Loading Char: %c\n", theConstant[i]);
 		constant[i-1] = theConstant[i];
 	}
 
-	return atoi(constant);
+	int res = strtol(constant,NULL,0);
+	//printf("res: %i",res);
+	return res;
 }
 
 cycle initCycle(void){

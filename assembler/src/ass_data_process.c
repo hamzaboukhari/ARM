@@ -45,9 +45,14 @@ uint32_t ass_computeNoRes(int cmd, char *inst[]){
 	int I;
 
 	if(isConst(Op2)){
+		//printf("Is A Constant: %s\n",Op2);
+		//printf("val: %i\n",getConst(Op2));
 		Op2Val = getConst(Op2);
+		printBits(Op2Val);
+		//printf("Is A Constant\n");
 		I = 1;
 	}else{
+		//printf("Is A Reg\n");
 		Op2Val = getConst(Op2);
 		I = 0;
 	}
