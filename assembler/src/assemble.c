@@ -69,10 +69,14 @@ void printAllArrays(char*** array, int len){
 }
 
 int main(int argv, char** args){
-
+ int size =strlen(args[1]);
  char *fileName = args[1];
- char Output[strlen(args[1]) - 1];
- strncpy(Output, args[1], strlen(args[1]) - 2);
+ char Output[strlen(args[1])];
+ strcpy(Output, args[1]);
+ Output[size-1] = NULL;
+ Output[size-2] = NULL;
+ strcat(Output,"_test");
+ printf("Output: %s\n",Output);
  int numLines = numOfLines(fileName);
  //printf("Executing instructions...\n");
  table_t table;

@@ -23,6 +23,7 @@ void writeToBinaryFile(char *filePath,assembler *assInstState){
    fwrite(&(assInstState->Instructions[i]),sizeof(uint32_t),1,fp);
    i++;
   }
+  printf("Writing done \n");
 
 }
 
