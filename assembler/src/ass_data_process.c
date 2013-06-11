@@ -144,4 +144,6 @@ uint32_t ass_data_process(char *inst[], table_t *table){
 
 	return res;
 
+	// 1110 00 1 1101 0 0000 0011 011110000101
+	// 1110 00 1 1101 0 0000 0011 100100001010
 }
