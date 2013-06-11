@@ -15,8 +15,10 @@
 uint32_t evalI(char *op2){
 
 	if(isConst(op2)){
+		printf("Found a constant\n");
 		return 1;
 	}else{
+		printf("Found a register\n");
 		return 0;
 	}
 }
@@ -66,8 +68,9 @@ uint32_t ass_computeNoRes(int cmd, char *inst[]){
 
 	uint32_t instruction = OpCode | Rn | Op2;
 
-	instruction = setBit(instruction,25,1); //set I to 1
-	instruction = setBit(instruction,20,1); //set S to 1
+	instruction = setBit(instruction,25,0); //set I to 1
+	instruction = setBit(instruction,20,1); //set S to 0
+
 
 	return instruction;
 }
@@ -83,9 +86,15 @@ uint32_t ass_mov(char *inst[]){
 	uint32_t instruction = OpCode | Rd | Op2;
 
 	instruction = setBit(instruction,25,I); //set I to 1
+	instruction = setBit(instruction,20,0); //set S to 0
 
 	return instruction;
 }
+//1110 00 1 1101 0 0000 0000 000000000010 -- actual
+//1110 00 1 1101 0 0000 0000 000000000010 -- generated
+
+//1110 00 0 1010 1 0010 0000 000000000000 -- generated
+//1110 00 0 1010 1 0010 0000 000000000000 -- actual
 
 uint32_t ass_lsl(char *inst[]){
 	uint32_t OpCode = mov << 21;
@@ -125,14 +134,14 @@ uint32_t ass_data_process(char *inst[], table_t *table){
 
 	switch(OpCode){
 		//instructions that compute results:
-		case(Add): res = res | ass_computeRes(Add,inst); break;
+		case(ADD): res = res | ass_computeRes(ADD,inst); break;
 		case(sub): res = res | ass_computeRes(sub,inst); break;
 		case(rsb): res = res | ass_computeRes(rsb,inst); break;
 		case(and): res = res | ass_computeRes(and,inst); break;
 		case(eor): res = res | ass_computeRes(eor,inst); break;
 		case(orr): res = res | ass_computeRes(orr,inst); break;
 		//mov:
-		case(mov): res = res | ass_mov(inst); break;
+		case(mov): res = res | ass_mov(inst);break;
 		//instructions that do not compute results:
 		case(tst): res = res | ass_computeNoRes(tst,inst); break;
 		case(teq): res = res | ass_computeNoRes(teq,inst); break;
@@ -144,6 +153,6 @@ uint32_t ass_data_process(char *inst[], table_t *table){
 
 	return res;
 
-	// 1110 00 1 1101 0 0000 0011 011110000101
-	// 1110 00 1 1101 0 0000 0011 100100001010
+	//1110 00 0 1010 1 0010 0000 000000000000 -- original (cmp);
+	//1110 00 1 1010 1 0010 0000 000000000000 -- generated
 }

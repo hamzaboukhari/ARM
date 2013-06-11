@@ -34,7 +34,7 @@ and = 0,
 eor = 1,
 sub = 2,
 rsb = 3,
-Add = 4,
+ADD = 4,
 orr = 12,
 mov = 13,
 tst = 8,
@@ -54,8 +54,8 @@ mla
 
 enum SDTCommands {
 //integer represents L bit
-ldr,
-str
+ldr = 0,
+str = 1
 };
 
 enum BCommands {

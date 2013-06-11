@@ -29,7 +29,7 @@ char ***getInstructions(char*** resultArray, int len, table_t *table){
 }
 
 
-void assembleInstructions(char*** resultArray, int len, table_t *table, assembler *output){
+int assembleInstructions(char*** resultArray, int len, table_t *table, assembler *output){
 	//printf("Starting Executing instructions...\n");
 
 	for(int i = 0; i<len; i++){
@@ -56,7 +56,7 @@ void assembleInstructions(char*** resultArray, int len, table_t *table, assemble
 		output->counter++;
 	}
 
-	finishedExecution(output);
+ return finishedExecution(output,len);
 
 }
 
@@ -96,7 +96,7 @@ int main(int argv, char** args){
  assembler assembledInstructions;
  assembledInstructions = initASM();
  //printf("Executing instructions...\n");
- assembleInstructions(instructionArray,numLines,&table, &assembledInstructions);
+ numLines = assembleInstructions(instructionArray,numLines,&table, &assembledInstructions);
 
  printf("Assembled Instructions:\n\n");
  printAllBits(&assembledInstructions,numLines);
@@ -107,7 +107,7 @@ int main(int argv, char** args){
 
  //printf("Counter: %d\n", assembledInstructions.counter);
  //printf("\nFinished...\n");
- writeToBinaryFile(args[2], &assembledInstructions);
+ writeToBinaryFile(args[2], &assembledInstructions,numLines);
  printf("\n");
 
 // printList(assembledInstructions.BigVals);
