@@ -13,16 +13,14 @@
 #include "leak_detector_c.h"
 
 
-void writeToBinaryFile(char *filePath,assembler *assInstState){
+void writeToBinaryFile(char *filePath,assembler *assInstState,int nmemb){
  FILE *fp = fopen(filePath,"w");
  if(fp == NULL){
   perror("Writing binary file error");
   exit(EXIT_FAILURE);
  }
-  int i=0;
-  while(assInstState->Instructions[i] != 0x0){
+  for(int i=0; i<nmemb; i++){
    fwrite(&(assInstState->Instructions[i]),sizeof(uint32_t),1,fp);
-   i++;
   }
   fclose(fp);
   //printf("Writing done \n");
@@ -34,10 +32,13 @@ void printOriginal(char *loc){
  FILE *fp = fopen(loc,"rb");
  uint32_t *bitArray = calloc(sizeof(uint32_t)*100,4);
  int i=0;
+ fseek(fp,0,SEEK_END);
+ int size = ftell(fp);
+ fseek(fp,0,SEEK_SET);
  while(!feof(fp)){
   fread(&(bitArray[i]),sizeof(uint32_t)*100,1,fp);
  }
- for(int j=0; bitArray[j] != 0x00; j++){
+ for(int j=0; j < (size/4); j++){
   printBits(bitArray[j]);
  }
 }
@@ -59,28 +60,32 @@ int getMaxIndex(uint32_t *arr){
  return i;
 }
 
-void finishedExecution(assembler *instState){
+int finishedExecution(assembler *instState,int last_poss){
  printf("ended ex \n");
  int i=0;
- int last_poss = getMaxIndex(instState->BigVals);
- printf("Max Index: %d \n",last_poss);
  iterator it = start(instState->BigVals);
  iterator foot = end(instState->BigVals);
+
+ printf("\nPinting list: \n");
+ printList(instState->BigVals);
+ printf("\n\n");
 
  while(it != foot){
   int inc = last_poss+i;
   uint32_t offset = (inc - it->type);
-  offset = offset & 0x000000FF;
-  offset = offset * 4;
+  offset = 4*(inc-2); //since PC is ahead by 2 instructions
+  printf("\ninc:%d\n",last_poss);
   printf("offset: 0x%08x \n",offset);
   printf("Val: 0x%08x\n\n",it->value);
-  //instState->Instructions[inc] = it->value; //TODO: CHECK;
+  instState->Instructions[last_poss] = it->value; //TODO: CHECK;
+  last_poss++;
   uint32_t transfer_inst = instState->Instructions[it->type];
   transfer_inst = transfer_inst ^ offset;
   instState->Instructions[it->type] = transfer_inst;
   it = next(it);
   i++;
  }
+ return last_poss;
 }
 
 int isConst(char* theConstant){
@@ -134,7 +139,7 @@ void printBits(uint32_t x){
 }
 
 void printAllBits(assembler *output, int len){
-	for(int i = 0; i<len && output->Instructions[i] != 0x0; i++){
+	for(int i = 0; i<len; i++){
 		printBits(output->Instructions[i]);
 	}
 }

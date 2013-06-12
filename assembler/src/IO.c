@@ -39,8 +39,8 @@ void lstrip(char *string)
 
 void strip(char *string)
 {
-  lstrip(string);
-  rstrip(string);
+  lstrip(string); /*Removes excess spaces/tabs on the start of the string; */
+  rstrip(string); /*Removes excess spaces/tabs on the end of the string; */
 }
 
 
@@ -92,7 +92,8 @@ char **tokeniser(char str[],char *seperator){
 int numOfLines(char* input){
 	//printf("Executing numOfLines()...\n");
 	FILE *temp = fopen(input,"r");
-	int ch, numLines=0;
+    int ch,numLines=0;
+
 	//printf("Starting...\n");
 	while (ch!=EOF){
 		ch = fgetc(temp);
@@ -127,7 +128,10 @@ char **readFromFile(char* input){
  }
  while(!feof(fp)){
    result[j] = fgets(result[j],20,fp);
-   j++;
+   strip(result[j]);
+   if(result[j] != '\0'){
+	j++;
+   }
  }
  //printf("%s",result[0]);
  //printf("%s",result[1]);

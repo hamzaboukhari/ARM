@@ -169,6 +169,8 @@ uint32_t Dt_differentiate(char *instruction[], table_t *t,assembler *instState){
 //11100101100100000000000000000000
 
 
+//1110 01 0 1 1 00 0 0001 0000 000000000001 -generated
+//1110 01 0 1 1 00 0 0001 0000 000000011100 -actual
 
 
 

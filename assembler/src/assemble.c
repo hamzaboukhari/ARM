@@ -90,7 +90,9 @@ int main(int argv, char** args){
  //printf("Executing instructions...\n");
  //Removing Labels
  char ***instructionArray = getInstructions(finalArr,numLines,&table);
+ printf("NUMLINES BEFORE: %d\n",numLines);
  numLines = numLines - numOfLoops(finalArr,numLines,&table);
+ printf("NUMLINES AFTER: %d\n",numLines);
  printAllArrays(instructionArray,numLines);
 
  assembler assembledInstructions;
