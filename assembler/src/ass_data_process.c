@@ -37,7 +37,7 @@ uint32_t calcOp2(char *op2){
 				//printBits(op2Val);
 			}
 		}
-		uint32_t rot = rotate << 7;
+		uint32_t rot = (rotate >> 1) << 8;
 		return rot | op2Val;
 		//return op2Val;
 	}else{
@@ -100,10 +100,11 @@ uint32_t ass_lsl(char *inst[]){
 	uint32_t OpCode = mov << 21;
 	uint32_t Rn1 = getConst(inst[1]) << 12;
 	uint32_t Rn2 = getConst(inst[1]);
-	uint32_t Op2Val = getConst(inst[2]) << 8;
+	uint32_t Op2 = calcOp2(inst[2]);
 
-	uint32_t instruction = OpCode | Rn1 | Rn2 | Op2Val;
+	uint32_t instruction = OpCode | Rn1 | Rn2 | Op2;
 
+	printBits(instruction);
 	return instruction;
 }
 

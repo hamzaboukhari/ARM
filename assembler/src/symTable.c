@@ -21,7 +21,7 @@ void buildSymTable(table_t *symTable){
 		               ,Data_Processing,Data_Processing,Data_Processing,Data_Processing
 		               ,Data_Processing,Data_Processing,Multiply,Multiply,Data_Transfer
 		               ,Data_Transfer,Branch,Branch,Branch,Branch,Branch,Branch,Branch
-		               ,Special,Special, Label};
+		               ,Data_Processing,Data_Processing, Label};
  insertElements(symTable,keys,values,types);
  //printList(symTable);
 

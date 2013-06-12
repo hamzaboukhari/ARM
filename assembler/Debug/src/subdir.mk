@@ -8,9 +8,10 @@ C_SRCS += \
 ../src/LinkedList.c \
 ../src/ass_branch.c \
 ../src/ass_data_process.c \
-../src/ass_mutliply.c \
+../src/ass_multiply.c \
 ../src/assemble.c \
 ../src/data_transfer.c \
+../src/leak_detector_c.c \
 ../src/symTable.c \
 ../src/utils.c 
 
@@ -19,9 +20,10 @@ OBJS += \
 ./src/LinkedList.o \
 ./src/ass_branch.o \
 ./src/ass_data_process.o \
-./src/ass_mutliply.o \
+./src/ass_multiply.o \
 ./src/assemble.o \
 ./src/data_transfer.o \
+./src/leak_detector_c.o \
 ./src/symTable.o \
 ./src/utils.o 
 
@@ -30,9 +32,10 @@ C_DEPS += \
 ./src/LinkedList.d \
 ./src/ass_branch.d \
 ./src/ass_data_process.d \
-./src/ass_mutliply.d \
+./src/ass_multiply.d \
 ./src/assemble.d \
 ./src/data_transfer.d \
+./src/leak_detector_c.d \
 ./src/symTable.d \
 ./src/utils.d 
 

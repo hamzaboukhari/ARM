@@ -74,7 +74,6 @@ enum type {
 	Multiply = 1,
 	Data_Transfer = 2,
 	Branch = 3,
-	Special = 4,
 	Label = 5
 };
 

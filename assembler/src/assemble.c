@@ -98,11 +98,10 @@ int main(int argv, char** args){
  //printf("Executing instructions...\n");
  numLines = assembleInstructions(instructionArray,numLines,&table, &assembledInstructions);
 
- printf("Assembled Instructions:\n\n");
+ printf("\nAssembled Instructions:\n");
  printAllBits(&assembledInstructions,numLines);
 
- printf("\n");
-
+ printf("\nOriginal Instructions:\n");
  printOriginal(Input_2);
 
  //printf("Counter: %d\n", assembledInstructions.counter);
