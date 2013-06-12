@@ -57,9 +57,11 @@ char *checkTransferInst(char *string){
   if(string[i] == '['){
    for(int j=i ; j<len; j++){
 	string[j] = string[j] == ',' ? '.' : string[j];
+	 printf("Transfer:%s\n",string);
    }
   }
  }
+
  return string;
 }
 
@@ -79,6 +81,8 @@ char **tokeniser(char str[],char *seperator){
     {
   //    printf("Token Saving: %s\n",token);
       strcpy(res[j],token);
+      printf("RES:%s\n",res[j]);
+      strip(res[j]);
       token = strtok(NULL, seperator);
  //     printf("New Token: %s\n",token);
       j++;

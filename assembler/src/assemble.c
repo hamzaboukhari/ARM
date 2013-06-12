@@ -103,7 +103,7 @@ int main(int argv, char** args){
  printAllBits(&assembledInstructions,numLines);
 
  printf("\nOriginal Instructions:\n");
- //printOriginal(Input_2);
+ printOriginal(Input_2);
 
  //printf("Counter: %d\n", assembledInstructions.counter);
  //printf("\nFinished...\n");
