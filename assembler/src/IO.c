@@ -92,16 +92,17 @@ char **tokeniser(char str[],char *seperator){
 int numOfLines(char* input){
 	//printf("Executing numOfLines()...\n");
 	FILE *temp = fopen(input,"r");
-    int ch,numLines=0;
+    int numLines=0;
 
-	//printf("Starting...\n");
-	while (ch!=EOF){
-		ch = fgetc(temp);
-		if(ch=='\n')numLines++;
-	}
-
+	while(!feof(temp)){
+     char *line = malloc(sizeof(char) * 100);
+     fgets(line,100,temp);
+     strip(line);
+     if(line != NULL && line[0] != '\0'){
+      numLines++;
+     }
+    }
 	fclose(temp);
-
 	return numLines;
 }
 
@@ -126,33 +127,27 @@ char **readFromFile(char* input){
  for(int i=0; i<100; i++){
   result[i] = malloc(100 * sizeof(char));
  }
- while(!feof(fp)){
-   result[j] = fgets(result[j],20,fp);
+ while(!feof(fp) && result[j] != NULL){
+   result[j] = fgets(result[j],100,fp);
    strip(result[j]);
-   if(result[j] != '\0'){
+   if(result[j] != NULL && result[j][0] != '\0'){
 	j++;
    }
  }
- //printf("%s",result[0]);
- //printf("%s",result[1]);
- //printf("%s",result[2]);
- return result;
+  return result;
 }
 
 char *getLabelName(char c[]) {
 	//printf("Getting Label Name...\n");
 	int length = strlen(c);
 	//printf("Length: %i \n", length);
-	char *res;
-	for (int i = 0 ; i < (length-2) ; i++) {
-		res[i] = c[i];
-	}
-	//printf("labelName: %s\n", res);
+	char *res = malloc(sizeof(char) * length+1);
+	strcpy(res,c);
+	printf("labelName: %s\n", res);
 	return res;
 }
 
 int checkForLabel(char c[]) {
-	//printf("s: %c \n" , c[0]);
 	//printf("Checking if Label...\n");
 	int length = strlen(c);
 	//printf("Length: %i \n", length);
@@ -234,6 +229,7 @@ char ***fileTokeniser(char** resultFromFile, int numLines, table_t *table){
   }
 
  }
+
  return result;
 }
 

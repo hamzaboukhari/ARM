@@ -66,10 +66,6 @@ int finishedExecution(assembler *instState,int last_poss){
  iterator it = start(instState->BigVals);
  iterator foot = end(instState->BigVals);
 
- printf("\nPinting list: \n");
- printList(instState->BigVals);
- printf("\n\n");
-
  while(it != foot){
   int inc = last_poss+i;
   uint32_t offset = (inc - it->type);
