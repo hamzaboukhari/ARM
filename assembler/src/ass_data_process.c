@@ -101,7 +101,12 @@ uint32_t ass_lsl(char *inst[]){
 	uint32_t OpCode = mov << 21;
 	uint32_t Rn = getConst(inst[1]) << 12;
 	uint32_t Op2 = getConst(inst[1]);
-	uint32_t Shift = getConst(inst[1]) << 7;
+	uint32_t Shift = getConst(inst[2]) << 7;
+
+	if(inst[1][2]=='x'){
+		Shift = ~Shift + 1;
+		Shift = Shift & 0xF00;
+	}
 
 	uint32_t instruction = OpCode | Rn | Shift | Op2;
 
