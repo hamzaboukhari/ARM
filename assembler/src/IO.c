@@ -218,7 +218,7 @@ char ***fileTokeniser(char** resultFromFile, int numLines, table_t *table){
 	  int j = 0;
 	  while (j < numLines) {
 		  if ((strcmp(result[j][0], "Label") == 0) & (!strcmp(result[j][1], result[i][1]) == 0)) {
-			  sprintf(result[i][2], "%d", atoi(result[j][2]) - address);
+			  sprintf(result[i][2], "%d", atoi(result[j][2]) - address -4);
 			  break;
 		  }
 		  j++;
