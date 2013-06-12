@@ -14,7 +14,7 @@
 #include "leak_detector_c.h"
 
 enum {
-	PC_OFFSET = 8
+	PC_OFFSET = 4
 };
 
 uint32_t calcOffset(char *c) {

@@ -68,18 +68,16 @@ uint32_t ass_computeNoRes(int cmd, char *inst[]){
 
 	uint32_t instruction = OpCode | Rn | Op2;
 
-	instruction = setBit(instruction,25,0); //set I to 1
-	instruction = setBit(instruction,20,1); //set S to 0
+	instruction = setBit(instruction,25,I); //set I Bit
+	instruction = setBit(instruction,20,1); //set S to 1
 
 
 	return instruction;
 }
 
 uint32_t ass_mov(char *inst[]){
-	//printf("MOV:");
 	uint32_t OpCode = mov << 21;
 	uint32_t Rd = getConst(inst[1]) << 12;
-	printf("RD: %s = %i \n",inst[1], Rd >> 12);
 	uint32_t Op2 = calcOp2(inst[2]);
 	int I = evalI(inst[2]);
 
@@ -98,13 +96,12 @@ uint32_t ass_mov(char *inst[]){
 
 uint32_t ass_lsl(char *inst[]){
 	uint32_t OpCode = mov << 21;
-	uint32_t Rn1 = getConst(inst[1]) << 12;
-	uint32_t Rn2 = getConst(inst[1]);
-	uint32_t Op2 = calcOp2(inst[2]);
+	uint32_t Rn = getConst(inst[1]) << 12;
+	uint32_t Op2 = getConst(inst[1]);
+	uint32_t Shift = getConst(inst[1]) << 7;
 
-	uint32_t instruction = OpCode | Rn1 | Rn2 | Op2;
+	uint32_t instruction = OpCode | Rn | Shift | Op2;
 
-	printBits(instruction);
 	return instruction;
 }
 
