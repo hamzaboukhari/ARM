@@ -51,21 +51,38 @@ void printArray(char** array){
  }
 }
 
+char *removeSpaces(char *string){
+ int size = strlen(string);
+ int j=0;
+ char *res = malloc(sizeof(char) * size + 1);
+ if(res == NULL){
+  perror("Maloc Failure removeSpaces \n");
+  exit(EXIT_FAILURE);
+ }
+ for(int i=0; i<size;i++){
+  res[j] = string[i];
+  if(string[i] != ' '){
+   j++;
+  }
+ }
+ return res;
+}
+
 char *checkTransferInst(char *string){
  int len = strlen(string);
  for(int i=0; i<len; i++){
   if(string[i] == '['){
+   strcpy((string+i),removeSpaces(string+i));
    for(int j=i ; j<len; j++){
 	string[j] = string[j] == ',' ? '.' : string[j];
-	 printf("Transfer:%s\n",string);
    }
   }
  }
-
  return string;
 }
 
 char **tokeniser(char str[],char *seperator){
+   printf("SEPERATOR:%s\n",seperator);
    char *token = (char *)malloc(100);
    char **res  = (char **)malloc(10 * sizeof(char *));
 
