@@ -39,6 +39,8 @@ uint32_t calcOp2(char *op2){
 			}
 		}
 		uint32_t rot = (rotate >> 1) << 8;
+		rot = ~rot + 1;
+		rot = rot & 0xF00;
 		return rot | op2Val;
 		//return op2Val;
 	}else{
