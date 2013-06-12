@@ -15,10 +15,10 @@
 uint32_t evalI(char *op2){
 
 	if(isConst(op2)){
-		printf("Found a constant\n");
+		//printf("Found a constant\n");
 		return 1;
 	}else{
-		printf("Found a register\n");
+		//printf("Found a register\n");
 		return 0;
 	}
 }
@@ -31,9 +31,10 @@ uint32_t calcOp2(char *op2){
 		uint32_t op2Val = getConst(op2);
 		int rotate = 0;
 		if(op2Val > 255){
-			for(int i=0;bitCheck(op2Val,0)==0;i++){
-				rotate++;
-				op2Val >>= 1;
+			for(int i=0;bitCheck(op2Val,0)==0 && bitCheck(op2Val,1)==0;i++){
+				printf("Rotate Val: %i\n",rotate);
+				rotate += 2;
+				op2Val >>= 2;
 				//printBits(op2Val);
 			}
 		}
