@@ -65,6 +65,7 @@ char *removeSpaces(char *string){
    j++;
   }
  }
+ res[j] = '\0';
  return res;
 }
 
@@ -84,19 +85,21 @@ char *checkTransferInst(char *string){
 char **tokeniser(char str[],char *seperator){
    printf("SEPERATOR:%s\n",seperator);
    char *token = (char *)malloc(100);
-   char **res  = (char **)malloc(10 * sizeof(char *));
+   char **res  = (char **)malloc(20 * sizeof(char *));
 
    for(int i=0; i<10; i++){
     res[i] = (char *) malloc(100 * sizeof(char));
    }
    int j=0;
 
+   printf("Modified Before:%s\n",str);
    char *modified = checkTransferInst(str);
+   printf("Modified:%s\n",modified);
    token = strtok(modified, seperator);
    //printf("First Token: %s\n",token);
    while(token != NULL)
     {
-  //    printf("Token Saving: %s\n",token);
+     //printf("Token Saving: %s\n",token);
       strcpy(res[j],token);
       printf("RES:%s\n",res[j]);
       strip(res[j]);
@@ -137,6 +140,8 @@ int numOfLoops(char*** resultArray, int len, table_t *table){
 		}
 	}
 
+	printf("NUMBER OF LOOPS:%d\n",j);
+
 	return j;
 }
 
@@ -174,7 +179,7 @@ int checkForLabel(char c[]) {
 	//printf("Length: %i \n", length);
 	for (int i = 0 ; i < length ; i++) {
 		if (c[i] == ':') {
-			//printf("Found : \n");
+			printf("Found LABEL : %s \n",c);
 			return 1;
 		}
 	}
