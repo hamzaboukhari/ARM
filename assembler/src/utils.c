@@ -65,18 +65,19 @@ int finishedExecution(assembler *instState,int last_poss){
  int i=0;
  iterator it = start(instState->BigVals);
  iterator foot = end(instState->BigVals);
+ printList(instState->BigVals);
  while(it != foot){
   int inc = last_poss;
   uint32_t offset = (inc - it->type);
-  offset = 4*(offset); //since PC is ahead by 2 instructions //TODO: CHECK
- // printf("\nInitial poss: %d\n",it->type);
- // printf("inc:%d\n",last_poss);
- // printf("offset: %d \n",offset);
- // printf("Val: 0x%08x\n\n",it->value);
+  offset = 4*(offset-2); //since PC is ahead by 2 instructions //TODO: CHECK
+  printf("\nInitial poss: %d\n",it->type);
+  printf("inc:%d\n",last_poss);
+  printf("offset: %d \n",offset);
+  printf("Val: 0x%08x\n\n",it->value);
   instState->Instructions[last_poss] = it->value;
   last_poss++;
   uint32_t transfer_inst = instState->Instructions[it->type];
-  transfer_inst = transfer_inst | offset;
+  transfer_inst |= offset;
   instState->Instructions[it->type] = transfer_inst;
   it = next(it);
   i++;

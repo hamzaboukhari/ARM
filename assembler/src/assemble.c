@@ -73,7 +73,7 @@ int main(int argv, char** args){
  int size =strlen(args[1]);
  char *fileName = args[1];
  char Output[strlen(args[1])];
- char Input_2[strlen(args[2])];
+ char Input_2[strlen(args[1])];
  strcpy(Output, args[1]);
  Output[size-1] = NULL;
  Output[size-2] = NULL;
@@ -105,11 +105,11 @@ int main(int argv, char** args){
  printAllBits(&assembledInstructions,numLines);
 
  printf("\nOriginal Instructions:\n");
+ printOriginal(Input_2);
 
  //printf("Counter: %d\n", assembledInstructions.counter);
  //printf("\nFinished...\n");
  writeToBinaryFile(args[2], &assembledInstructions,numLines);
- printOriginal(args[2]);
  printf("\n");
 
  return 0;
