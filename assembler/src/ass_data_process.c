@@ -51,6 +51,9 @@ uint32_t calcOp2(char *op2){
 
 uint32_t ass_computeRes(int cmd, char *inst[]){
 	uint32_t OpCode = cmd << 21;
+	printf("INST1 DP:%s\n",inst[1]);
+	printf("INST2 DP:%s\n",inst[2]);
+	printf("INST3 DP:%s\n\n",inst[3]);
 	uint32_t Rd = getConst(inst[1]) << 12;
 	uint32_t Rn = getConst(inst[2]) << 16;
 	uint32_t Op2 = calcOp2(inst[3]);
@@ -60,10 +63,13 @@ uint32_t ass_computeRes(int cmd, char *inst[]){
 
 	instruction = setBit(instruction,25,I); //set I
 
+    printBits(instruction);
 	return instruction;
 }
 
 uint32_t ass_computeNoRes(int cmd, char *inst[]){
+	printf("Operand 1:%s\n",inst[1]);
+	printf("Operand 2:%s\n",inst[2]);
 	uint32_t OpCode = cmd << 21;
 	uint32_t Rn = getConst(inst[1]) << 16;
 	uint32_t Op2 = calcOp2(inst[2]);
@@ -120,10 +126,10 @@ uint32_t ass_data_process(char *inst[], table_t *table){
 	//printf("Value: %i\n",OpCode);
 	uint32_t res = 14 << 28; //set Cond to 1110 (al)
 
-/*
+
 	//Debugger Code:
-	switch(OpCode){
-		case(add): printf("Executing add...\n"); break;
+/*	switch(OpCode){
+		case(ADD): printf("Executing add...\n"); break;
 		case(sub): printf("Executing sub...\n"); break;
 		case(rsb): printf("Executing rsb...\n"); break;
 		case(and): printf("Executing and...\n"); break;
@@ -135,13 +141,14 @@ uint32_t ass_data_process(char *inst[], table_t *table){
 		case(tst): printf("Executing tst...\n"); break;
 		case(teq): printf("Executing teq...\n"); break;
 		case(cmp): printf("Executing cmp...\n"); break;
-	}
-*/
+	} */
+
 
 	switch(OpCode){
 		//instructions that compute results:
 		case(ADD): res = res | ass_computeRes(ADD,inst); break;
-		case(sub): res = res | ass_computeRes(sub,inst); break;
+		case(sub):printf("RES BEFORE: \n");printBits(res);res = res | ass_computeRes(sub,inst); 	printf("GENERATED INSTRUCTION SUB: ");
+	printBits(res); break;
 		case(rsb): res = res | ass_computeRes(rsb,inst); break;
 		case(and): res = res | ass_computeRes(and,inst); break;
 		case(eor): res = res | ass_computeRes(eor,inst); break;
@@ -151,7 +158,9 @@ uint32_t ass_data_process(char *inst[], table_t *table){
 		//instructions that do not compute results:
 		case(tst): res = res | ass_computeNoRes(tst,inst); break;
 		case(teq): res = res | ass_computeNoRes(teq,inst); break;
-		case(cmp): res = res | ass_computeNoRes(cmp,inst); break;
+		case(cmp): res = res | ass_computeNoRes(cmp,inst);
+		printf("GENERATED INSTRUCTION: COMP ");
+	printBits(res); break;break;
 		//Special Instructions:
 		case(andeq): res = 0; break;
 		case(lsl)  : res = res | ass_lsl(inst); break;
@@ -162,3 +171,13 @@ uint32_t ass_data_process(char *inst[], table_t *table){
 	//1110 00 0 1010 1 0010 0000 000000000000 -- original (cmp);
 	//1110 00 1 1010 1 0010 0000 000000000000 -- generated
 }
+
+////0xe26a8001 - sub
+//1110 00 1 0010 0 0100 0100 000000000001 - actual
+//1110 00 1 0010 0 0100 0100 000000000001 - generated
+
+
+//1110 00 0 0000 0 0000 0000 000000000000
+//0000 00 1 0010 0 0100 0100 000000000001
+//1110 00 1 0010 0 0100 0100 000000000001
+
