@@ -1,21 +1,110 @@
-\documentclass[11pt]{article}
+INTRO
 
-\usepackage{fullpage}
+We decided to approach the project in a linear fashion as opposed to assigning ourselves different parts and working on the whole project in parallel. In other words, we worked through it one part at a time, with all of us working on the same part, but different sections, at any given time.  
 
-\begin{document}
 
-\title{Our Extension...}
-\author{TODO}
 
-\maketitle
 
-\section{Introduction}
 
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-culpa qui officia deserunt mollit anim id est laborum.
 
-\end{document}
+
+
+\section{Part 1 :: Emulator}
+
+ 
+
+(Structure of Emulator; bullet points)...
+
+ 
+
+Subsections:
+
+- File I/O + reading into Pipeline/Memory Structures [Pav]
+
+- Pipeline [Pav/Hakeem]
+
+- Instruction Differentiation [Hakeem]
+
+ 
+
+-       Branch/Multiply [Hamza]
+
+Emulating the Multiply instruction involved retrieving binary values from the given registers, multiplying them together, and if the accumulate bit was set, adding on a further value. To do this, we implemented functions to carry out binary addition and binary multiplication.  The result of this was then stored in another register and the CPSR flags were set accordingly.
+
+Emulating the Branch instruction involved retrieving and manipulating the offset, and then adding it onto the PC.  As well as this, we needed to clear the pipeline, as the previous instruction would no longer be valid.
+
+ 
+
+- DP [Hakeem]
+
+- SDT [Pav]
+
+ 
+
+Remember to cover:
+
+- problems/challenges encountered, and how overcome/what was your solution?
+
+- How efficient is it...could improve implementation?
+
+ 
+
+Testing...
+
+ 
+
+Final Section:
+
+- Short explanation of linking emulator and assembler via utils
+
+ 
+
+ 
+
+\section{Part 2 :: Assembler}
+
+ 
+
+(Structure of Assembler; bullet points)...
+
+ 
+
+Subsections:
+
+- File I/O (saving into 2D array) [Pav]
+
+- Tokeniser (parsing lines of instructions into 3D array) [Pav/Hakeem]
+
+- looping/branch offset calculation integrated into the tokenizer...why? [Hamza]
+
+We decided to integrate branch detection and the offset calculation into our tokenizer loop. This means that whenever a label is detected in the instructions, its name and address is stored in the instruction array. The loop then iterates through the remaining instructions until it has found the corresponding label condition. The offset is then be calculated and stored in the instruction array to be used by the Branch instruction assembler function. Because a label could appear after the label condition, when encountering a label we had to check whether the condition had come before by iterating through the instructions already stored in the array. If a condition is found, as above, the offset is calculated and then stored in the instruction array alongside the condition, to then be interpreted by the assembler function.
+
+ 
+
+-       Branch/Multiply [Hamza]
+
+Assembling the Multiply instruction involved checking whether it was a regular multiply or accumulate multiply, retrieving the binary equivalent of the given registers and values, and then setting these along with various default values.
+
+Assembling the Branch instruction involved manipulating the offset we had calculated earlier, taking into account the PC offset, and then setting this and various default values. The main source of confusion was finding the PC offset, as we had to factor in the way our pipeline worked, which still baffles us to this day.
+
+ 
+
+ 
+
+ 
+
+- DP [Hakeem]
+
+- SDT [Pav]
+
+ 
+
+Remember to cover:
+
+- problems/challenges encountered, and how overcome/what was your solution?
+
+- How efficient is it...could improve implementation?
+
+ 
+
+Testing...

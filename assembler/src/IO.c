@@ -83,7 +83,7 @@ char *checkTransferInst(char *string){
 }
 
 char **tokeniser(char str[],char *seperator){
-   printf("SEPERATOR:%s\n",seperator);
+   //printf("SEPERATOR:%s\n",seperator);
    char *token = (char *)malloc(100);
    char **res  = (char **)malloc(20 * sizeof(char *));
 
@@ -92,16 +92,16 @@ char **tokeniser(char str[],char *seperator){
    }
    int j=0;
 
-   printf("Modified Before:%s\n",str);
+ //  printf("Modified Before:%s\n",str);
    char *modified = checkTransferInst(str);
-   printf("Modified:%s\n",modified);
+  // printf("Modified:%s\n",modified);
    token = strtok(modified, seperator);
    //printf("First Token: %s\n",token);
    while(token != NULL)
     {
      //printf("Token Saving: %s\n",token);
       strcpy(res[j],token);
-      printf("RES:%s\n",res[j]);
+   //  printf("RES:%s\n",res[j]);
       strip(res[j]);
       token = strtok(NULL, seperator);
  //     printf("New Token: %s\n",token);
@@ -168,7 +168,7 @@ char *getLabelName(char c[]) {
 	int length = strlen(c);
 	//printf("Length: %i \n", length);
 	char *res = malloc(sizeof(char) * length+1);
-	strcpy(res,c);
+	strncpy(res,c, length - 1);
 	printf("labelName: %s\n", res);
 	return res;
 }
@@ -207,7 +207,7 @@ char ***fileTokeniser(char** resultFromFile, int numLines, table_t *table){
 	  result[i][1] = labelName;
 	  int j = 0;
 	  	  while (j < numLines) {
-	  		  if ((getType(table, result[j][0]) == Branch) & (!strcmp(result[j][1], result[i][1]) == 0)) {
+	  		  if ((getType(table, result[j][0]) == Branch) && (strcmp(result[j][1], result[i][1]) == 0)) {
 	  			  sprintf(result[j][2], "%d", address - atoi(result[j][2]));
 	  			  break;
 	  		  }
@@ -218,7 +218,6 @@ char ***fileTokeniser(char** resultFromFile, int numLines, table_t *table){
 	  	  }
 	  printf("LabelAddress: %i\n\n",address+4);
   } else {
-	address += 4;
 
   char **entry = tokeniser(resultFromFile[i]," ");
   result[i] = entry;
@@ -242,7 +241,8 @@ char ***fileTokeniser(char** resultFromFile, int numLines, table_t *table){
 	  //printf("found branch \n");
 	  int j = 0;
 	  while (j < numLines) {
-		  if ((strcmp(result[j][0], "Label") == 0) & (!strcmp(result[j][1], result[i][1]) == 0)) {
+		  if ((strcmp(result[j][0], "Label") == 0) && (strcmp(result[j][1], result[i][1]) == 0)) {
+			  printf("Cond Address: %s\n",result[j][2]);
 			  sprintf(result[i][2], "%d", atoi(result[j][2]) - address -4);
 			  break;
 		  }
@@ -251,7 +251,9 @@ char ***fileTokeniser(char** resultFromFile, int numLines, table_t *table){
 	  if (j == numLines) {
 		  sprintf(result[i][2], "%d", address);
 	  }
+
   }
+  address += 4;
   }
 
  }
