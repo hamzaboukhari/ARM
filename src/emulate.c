@@ -11,7 +11,7 @@
 #include "utils.h"
 
 
-int main2(int argc, char **argv){
+int main(int argc, char **argv){
  int size;
  FILE *fp = fopen(argv[1],"rb");
  //printf("Opening file...\n");

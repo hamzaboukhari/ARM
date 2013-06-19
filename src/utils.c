@@ -91,18 +91,15 @@ int isConst(char* theConstant){
 
 uint32_t getConst(char* theConstant){
 	int len = strlen(theConstant);
-	//printf("Converting theConstant[%i]: %s\n",len,theConstant);
 	if(theConstant[len-1] == '\n'){
 		len--;
 	}
 	char constant[len-1];
 	for(int i=1;i < len;i++){
-		//printf("Loading Char: %c\n", theConstant[i]);
-		constant[i-1] = theConstant[i];
+	 constant[i-1] = theConstant[i];
 	}
 
 	int res = strtol(constant,NULL,0);
-	//printf("res: %i",res);
 	return res;
 }
 
@@ -113,9 +110,14 @@ cycle initCycle(void){
 
 state initState(void) {
  state st = {.PC = 0, .CPSR = 0, .reg = {0}};
- st.ARM_mem  = calloc(sizeof(uint32_t) * 4096,4);
+ st.ARM_mem  = calloc(4096,sizeof(uint32_t));
+ st.Special_Memory[0] = 0x20200008;
+ st.Special_Memory[1] = 0x20200004;
+ st.Special_Memory[2] = 0x20200000;
+ st.Special_Memory[3] = 0x20200028;
+ st.Special_Memory[4] = 0x2020001C;
  return st;
- }
+}
 
 assembler initASM(void){
  assembler instState = {.counter = 0};
@@ -176,49 +178,25 @@ uint32_t switchEndian(uint32_t val){
  return r1 ^ r2 ^ r3 ^ r4;
 }
 
-
 uint32_t getUnallignedWord(int memLoc,state *s){
-
-// printf("Unalligned Initial memLoc: 0x%08x \n",memLoc);
  int excess = memLoc % 4;
  int initialIndex = (memLoc/4);
  int nextIndex = initialIndex + 1;
-
-// printf("Initial Index: 0x%08x \n",initialIndex);
-
  uint32_t startValue = switchEndian(s -> ARM_mem[initialIndex]);
-// printf("Start value: 0x%08x \n",startValue);
  uint32_t endValue   = switchEndian(s -> ARM_mem[nextIndex]);
-// printf("End value: 0x%08x \n\n",endValue);
-
  int num_bytes1 = 4 - excess;
-// printf("Excess: %d \n",num_bytes1);
-
  startValue <<= 8*excess;
-// printf("Shifted Start: 0x%08x \n",startValue);
  endValue >>= 8*num_bytes1;
-// printf("Shifted End: 0x%08x \n",endValue);
-
  uint32_t result = startValue ^ endValue;
-
-// printf("Unaligned Resul: 0x%08x \n",switchEndian(result));
  return switchEndian(result);
-
 }
 
 void writeUnalligneWord(int memLoc,state *s,uint32_t rd_Val){
-  printf("Writing to an unalligned memory address \n");
-
   int excess = memLoc % 4;
   int initialIndex = (memLoc/4);
   int nextIndex = initialIndex + 1;
-
   uint32_t startValue = switchEndian(s -> ARM_mem[initialIndex]);
-   printf("Start value: 0x%08x \n",startValue);
   uint32_t endValue   = switchEndian(s -> ARM_mem[nextIndex]);
-   printf("End value: 0x%08x \n",endValue);
-   printf("Reg value: 0x%08x \n\n",rd_Val);
-
   uint32_t start_mask;
   uint32_t reg_mask;
   uint32_t end_mask;
@@ -235,23 +213,17 @@ void writeUnalligneWord(int memLoc,state *s,uint32_t rd_Val){
 
    default: perror("Invalid allignment \n"); break;
   }
-  uint32_t startResult 		= startValue & start_mask;printBits(startResult);
-  uint32_t regStartResult   = (rd_Val & reg_mask); printBits(regStartResult);
+  uint32_t startResult 		= startValue & start_mask;
+  uint32_t regStartResult   = (rd_Val & reg_mask);
   uint32_t firstAddress 	= startResult ^ regStartResult;
-  printf("Start value: 0x%08x \n\n",startResult);
-
-  uint32_t endResult 		= endValue & end_mask; printBits(endResult);
-  uint32_t regEndResult     = (rd_Val & reg_mask2) << (4-excess)*8; printBits(regEndResult);
+  uint32_t endResult 		= endValue & end_mask;
+  uint32_t regEndResult     = (rd_Val & reg_mask2) << (4-excess)*8;
   uint32_t secondAddress    = endResult ^ regEndResult;
-
-  printf("End value: 0x%08x \n",secondAddress);
-
   firstAddress = switchEndian(firstAddress);
   firstAddress <<= excess * 8;
   secondAddress = switchEndian(secondAddress);
   firstAddress =  firstAddress ^ (secondAddress & reg_mask2);
   secondAddress = secondAddress & reg_mask;
-
   s -> ARM_mem[initialIndex] = firstAddress;
   s -> ARM_mem[nextIndex] 	 = secondAddress;
 }
@@ -356,66 +328,48 @@ void updateNZinCPSR(state *s, uint32_t res, int S){
 }
 
 void execute(state *s,cycle *c, uint32_t inst){
-	//printf("Executing An Instruction...\n\n");
-
 	enum bit {eq=0,ne=1,ge=10,lt=11,gt=12,le=13,al=14};
-
 	uint32_t cond = getBits(inst,28,31);
-
 	int N = bitCheck(s->CPSR,31);
 	int Z = bitCheck(s->CPSR,30);
 	int C = bitCheck(s->CPSR,29);
 	int V = bitCheck(s->CPSR,28);
 
-	if(cond == eq && Z == 1){ //printf("Cond: eq\n");
+	if(cond == eq && Z == 1){
 		runInstruction(inst,s,c);
-	} else if(cond == ne && Z == 0){ //printf("Cond: ne\n");
+	} else if(cond == ne && Z == 0){
 		runInstruction(inst,s,c);
-	} else if(cond == ge && N == V){ //printf("Cond: ge\n");
+	} else if(cond == ge && N == V){
 		runInstruction(inst,s,c);
-	} else if(cond == lt && N != V){ //printf("Cond: lt\n");
+	} else if(cond == lt && N != V){
 		runInstruction(inst,s,c);
-	} else if(cond == gt && (Z == 0 && N == V)){ //printf("Cond: gt\n");
+	} else if(cond == gt && (Z == 0 && N == V)){
 		runInstruction(inst,s,c);
-	} else if(cond == le && (Z == 1 || N != V)){ //printf("Cond: le\n");
+	} else if(cond == le && (Z == 1 || N != V)){
 		runInstruction(inst,s,c);
-	} else if(cond == al){// printf("Cond: al\n");
+	} else if(cond == al){
 		runInstruction(inst,s,c);
-	} else {// printf("Cond: N/A\n");
+	} else {
 		if(checkB(inst)){
 			s -> PC += 4;
 		}
 	}
 }
-//1110 01 0 1 1 0 0 1 1111 0000 000000100000 -- 0xE59F0020
 
-//Initally the current_inst and prev_inst = 0x1,
-//to enter the while loop;
 void startEmulation(state *s,cycle *c){
-//printf("Started...");
- //int i=0;
  while(c -> current_instr != 0x0){
    uint32_t current_inst = c -> current_instr;
    if(checkB(current_inst)){
-	//printf("Branch Detected...\n");
 	c -> current_instr = c -> prev_instr;
 	c -> prev_instr = s -> ARM_mem[(s -> PC)/4];
 	execute(s,c,current_inst);
-	//s -> PC += 4;
-	//i++;
    }else{
-	//printf("Non-Branch Detected...\n");
-	//printf("Instruction: 0x%08x \n",c -> current_instr);
 	execute(s,c,c -> current_instr);
 	c -> current_instr = c -> prev_instr;
 	c -> prev_instr = s -> ARM_mem[(s -> PC)/4];
 	s -> PC += 4;
-	//i++;
    }
-  // outputStateTEMP(*s);
-  // printf("\n");
  }
- //printf("Number of times loop is executed: %d \n",(s -> PC)/4);
 }
 
 
