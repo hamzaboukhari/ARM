@@ -67,9 +67,6 @@ void insertInEnd(table_t *t, char *k, int v,int type){
 }
 
 void insertExpression(table_t *t,char *k ,int val,int loc){
- //printf("Inst: %s",k);
- //printf("val: 0x%08x\n",val);
- //printf("loc: %d\n\n",loc);
  insert(t,end(t),k,val,loc);
 }
 
@@ -78,7 +75,6 @@ void insertElements(table_t *t,char keys[24][100],int values[24], int types[24])
  for(int i=0; i<24; i++){
   insertInEnd(t,keys[i],values[i],types[i]);
  }
- //printf("Insertion Complete ! \n");
 }
 
 int getValue(table_t *t, char *k){
@@ -94,16 +90,13 @@ int getValue(table_t *t, char *k){
 }
 
 int getType(table_t *t, char *k){
- //printf("Getting type \n");
  iterator i = startList(t);
  while(i != t->foot){
   if(strcmp(k,i->key) == 0){
    return i->type;
-   //printf("Got type \n");
   }
   i = next(i);
  }
- //printf("***Type [%s] Not Found !! \n",k);
  return -1;
 }
 

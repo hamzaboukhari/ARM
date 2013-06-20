@@ -12,13 +12,6 @@
 #include "utils.h"
 #include "a_linked_list.h";
 
- // Operand 1 : bits 16 - 19;
- // Operand 2 : bits 0 - 11;
- //if the S flag is set high then the CPRS reg should be updated;
- //if the I flag is set high then operand 2 is an immediate constant;
-
-
-//Test it.
 uint32_t rotateRight(uint32_t i, int bits) {
  return ((i >> bits) | (i << (32 - bits)));
 }
@@ -42,7 +35,6 @@ uint32_t shift(uint32_t op2, int type, int n){
 	}
 
 	return op2;
-
 }
 
 int shiftCarryOut(uint32_t op2, int type, int n){
@@ -122,20 +114,16 @@ uint32_t getOp2(state *s, uint32_t inst, int I){
 
 	 if(I == 1){
 		//Operand2 is an immediate value
-		//printf("inst: %d \n", inst);
 		op2 = rotateRight(getBits(inst,0,7),2*getBits(inst,8,11));
-		//printf("op2: %d \n", op2);
 	 } else {
 		//Operand2 is a register
 		int Rm = getBits(inst,0,3);
 		op2 = s -> reg[Rm];
 		if(bitCheck(inst,4)==0){
 			//Shift Specified By A Constant Amount
-			//printf("Before shift: %d\n",op2);
 			op2 = shift(op2,
 						getBits(inst,5,6),
 						getBits(inst,7,11));
-			//printf("After shift: %d\n",op2);
 		}else{
 			//optional: Shift Specified By A Register
 			op2 = shift(op2,
@@ -161,7 +149,6 @@ int getOp2Carry(state *s, uint32_t inst, int I){
 			C = shiftCarryOut(op2,
 							  getBits(inst,5,6),
 							  getBits(inst,7,11));
-			//printf("Carry out: %d\n",C);
 		}else{
 			//optional: Shift Specified By A Register
 			C = shiftCarryOut(op2,
@@ -197,31 +184,6 @@ void data_process(uint32_t inst, state *s){
 	 } else {
 	 	 C = 0;
 	 }
-
-
-	 	 //____________Test Instruction____________
-	 	 //                           Operand2
-	 	 //Cond 00 I OpC. S Rn   Rd   Rot. Imm. Val
-	 	 //1110 00 1 0001 1 0000 0001 0001 00000001
-
-	 	 //debugger:
-	 	 //printf("\nRunning Data Processing Instruction: ");
-	/* 	 switch(opcode){
-	 	 	  case(0) : printf("and\n");break;
-	 	 	  case(1) : printf("eor\n");break;
-	 	 	  case(2) : printf("sub\n");break;
-	 	 	  case(3) : printf("rsb\n");break;
-	 	 	  case(4) : printf("add\n");break;
-	 	 	  case(8) : printf("tst\n");break;
-	 	 	  case(9) : printf("teq\n");break;
-	 	 	  case(10): printf("cmp\n");break;
-	 	 	  case(12): printf("orr\n");break;
-	 	 	  case(13): printf("mov\n");break;
-	 	 	  default: perror("data_process opcode error\n");break;
-	 	 } */
-
-	 	 //printRegisters(*s);
-
 	 switch(opcode){
 	  case(and) : res = DPand(s,op1,op2,Rd);break;
 	  case(eor) : res = DPeor(s,op1,op2,Rd);break;
@@ -235,14 +197,6 @@ void data_process(uint32_t inst, state *s){
 	  case(mov): res = DPmov(s,op2,Rd);break;
 	  default: perror("data_process opcode error\n");break;
 	 }
-
-	 	 //debugger:
-	 	 //printf("Result: ");printHex(res);
-
-
-	 //Run S Check
 	 updateNZinCPSR(s,res,S);
 	 if(S==1){ s->CPSR = setBit(s->CPSR,29,C); }
-
-
 }

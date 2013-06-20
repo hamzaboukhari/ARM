@@ -15,10 +15,8 @@
 uint32_t evalI(char *op2){
 
 	if(isConst(op2)){
-		//printf("Found a constant\n");
 		return 1;
 	}else{
-		//printf("Found a register\n");
 		return 0;
 	}
 }
@@ -27,22 +25,18 @@ uint32_t calcOp2(char *op2){
 
 	if(isConst(op2)){
 		//Is a constant
-		//printf("%s is a constant: %i\n",op2, getConst(op2));
 		uint32_t op2Val = getConst(op2);
 		int rotate = 0;
 		if(op2Val > 255){
 			for(int i=0;bitCheck(op2Val,0)==0 && bitCheck(op2Val,1)==0;i++){
-				printf("Rotate Val: %i\n",rotate);
 				rotate += 2;
 				op2Val >>= 2;
-				//printBits(op2Val);
 			}
 		}
 		uint32_t rot = (rotate >> 1) << 8;
 		rot = ~rot + 1;
 		rot = rot & 0xF00;
 		return rot | op2Val;
-		//return op2Val;
 	}else{
 		//Is a register
 		return getConst(op2);
@@ -51,9 +45,6 @@ uint32_t calcOp2(char *op2){
 
 uint32_t ass_computeRes(int cmd, char *inst[]){
 	uint32_t OpCode = cmd << 21;
-	printf("INST1 DP:%s\n",inst[1]);
-	printf("INST2 DP:%s\n",inst[2]);
-	printf("INST3 DP:%s\n\n",inst[3]);
 	uint32_t Rd = getConst(inst[1]) << 12;
 	uint32_t Rn = getConst(inst[2]) << 16;
 	uint32_t Op2 = calcOp2(inst[3]);
@@ -63,13 +54,10 @@ uint32_t ass_computeRes(int cmd, char *inst[]){
 
 	instruction = setBit(instruction,25,I);
 
-    printBits(instruction);
 	return instruction;
 }
 
 uint32_t ass_computeNoRes(int cmd, char *inst[]){
-	printf("Operand 1:%s\n",inst[1]);
-	printf("Operand 2:%s\n",inst[2]);
 	uint32_t OpCode = cmd << 21;
 	uint32_t Rn = getConst(inst[1]) << 16;
 	uint32_t Op2 = calcOp2(inst[2]);
@@ -121,8 +109,7 @@ uint32_t ass_data_process(char *inst[], table_t *table){
 
 	switch(OpCode){
 		case(add): res = res | ass_computeRes(add,inst); break;
-		case(sub):printf("RES BEFORE: \n");printBits(res);res = res | ass_computeRes(sub,inst); 	printf("GENERATED INSTRUCTION SUB: ");
-	    printBits(res); break;
+		case(sub): res = res | ass_computeRes(sub,inst); break;
 		case(rsb): res = res | ass_computeRes(rsb,inst); break;
 		case(and): res = res | ass_computeRes(and,inst); break;
 		case(eor): res = res | ass_computeRes(eor,inst); break;
@@ -130,9 +117,7 @@ uint32_t ass_data_process(char *inst[], table_t *table){
 		case(mov): res = res | ass_mov(inst);break;
 		case(tst): res = res | ass_computeNoRes(tst,inst); break;
 		case(teq): res = res | ass_computeNoRes(teq,inst); break;
-		case(cmp): res = res | ass_computeNoRes(cmp,inst);
-		printf("GENERATED INSTRUCTION: COMP ");
-	    printBits(res); break;break;
+		case(cmp): res = res | ass_computeNoRes(cmp,inst); break;
 		case(andeq): res = 0; break;
 		case(lsl)  : res = res | ass_lsl(inst); break;
 	}

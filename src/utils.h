@@ -7,7 +7,6 @@
 
 #ifndef UTILS_H_
 #define UTILS_H_
-
 #include "a_linked_list.h";
 
 typedef struct states{

@@ -1,3 +1,10 @@
+/*
+ * a_symTable.c
+ *
+ *  Created on: 5 Jun 2013
+ *      Author: pp2112
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -22,7 +29,6 @@ void buildSymTable(table_t *symTable){
 		               ,Data_Transfer,Branch,Branch,Branch,Branch,Branch,Branch,Branch
 		               ,Data_Processing,Data_Processing, Label};
  insertElements(symTable,keys,values,types);
- //printList(symTable);
 
 }
 
